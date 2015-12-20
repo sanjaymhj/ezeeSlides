@@ -42,7 +42,7 @@ function LeftBar(container,slides){
 			
 			slide.onclick = (function(slideId){
 				return function(){
-					console.log(slideId);
+					console.log(slideId,"slideid from left bar");
 					var toWorkspace = new CustomEvent('slideToWorkSpace',{'detail':slideId});
 					
 					container.dispatchEvent(toWorkspace);
@@ -57,6 +57,7 @@ function LeftBar(container,slides){
 		self.leftBar.appendChild(self.slidesContainer);
 		self.leftBar.appendChild(self.addSlide);
 		container.appendChild(self.leftBar);
+
 	}
 
 	this.getCounter = function(){
@@ -75,20 +76,46 @@ function Tools(container){
 
 	var topTools = document.createElement('div');
 	topTools.setAttribute('class','slides-contianer');
-	var backgroundColor = document.createElement('div');
+	var backgroundColor = document.createElement('input');
+	var focusSlide;
+	var focusElement;
+	
 	this.init = function(){
 		topTools.setAttribute('class', 'top-tools');
-		backgroundColor.setAttribute('class','controls backgroundColor');
+		backgroundColor.setAttribute('class','controls');
+		backgroundColor.setAttribute('type','color');
+
 		topTools.appendChild(backgroundColor);
+		var changePosition = new ChangePosition(topTools,container);
+		//changePosition.init();
+		var fontSize = new FontSize(topTools,container);
+		var bold = new Bold(topTools,container);
+		var italics = new Italics(topTools,container);
+		var underline = new Underline(topTools,container);
+		var textAlign = new TextAlign(topTools,container);
+		var fontColor = new FontColor(topTools,container);
+
+
 		container.appendChild(topTools);
 	}
-;
+	this.changeFocusSlide =  function(focusEle){
+		focusElement = focusEle;
+		focusSlide = focusEle;
+		console.log(focusElement,"from tools focus Element",focusSlide," and this is the focusSlide");
+	}
+
+	backgroundColor.onchange = function(){
+		var changeBackground = new CustomEvent('changeBackground',{'detail':backgroundColor.value});
+		// console.log(backgroundColor.value);
+		container.dispatchEvent(changeBackground);
+	}
+	topTools.addEventListener('evtChangepositionX',function(e){console.log(e.detail);});
 }
 
 
 function CenterArea(container){
 	var slideArea = document.createElement('div');
-	
+	var self = this;
 	var initialMessage = document.createTextNode("Select the Slide to edit.");
 	this.init = function(){
 		slideArea.setAttribute('class','slides-area');
@@ -96,13 +123,46 @@ function CenterArea(container){
 		container.appendChild(slideArea);
 	}
 
-	slideArea.addEventListener('toWorkspace',function(){
+	this.changeWorkspace = function(focusSlide){
 		while (slideArea.hasChildNodes()) {
 		    slideArea.removeChild(slideArea.lastChild);
 		}
+		console.log(focusSlide,"from the center area");
+		var mainSlide = document.createElement('div');
+		for(var i=0;i<focusSlide.styles.length;i++){
+			mainSlide.style[focusSlide.styles[i].property]=focusSlide.styles[i].propertyValue;
+		}
+		//console.log(focusSlide)
+		for(var i=0;i<focusSlide.elements.length;i++){
+			var element = document.createElement(focusSlide.elements[i].type);
+			// if(focusSlide.elements[i].type == 'span')
+			// {
+				var text = document.createTextNode(focusSlide.elements[i].text);
+				element.appendChild(text);
+			// }
+			for(var j=0;j<focusSlide.elements[i].attributes.length;j++)
+			{
+				element.setAttribute(focusSlide.elements[i].attributes[j].attribute,focusSlide.elements[i].attributes[j].attributeValue);
+			}
 
+			console.log(focusSlide.elements[i].type);
+			for(var j=0;j<focusSlide.elements[i].styles.length;j++)
+			{
+				element.style[focusSlide.elements[i].styles[j].property]=focusSlide.elements[i].styles[j].propertyValue;
+			}
+			mainSlide.appendChild(element);
+			element.onclick = (function(el){
+				return function(){
+					var activeElementEvent = new CustomEvent('activeElementEvent',{detail:el});
+					container.dispatchEvent(activeElementEvent);
+				}
+			})(i);
+			
 
-	});
+		}	
+		slideArea.appendChild(mainSlide);
+		console.log(slideArea);
+	};
 
 	
 }

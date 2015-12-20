@@ -3,17 +3,10 @@ function Slide(id)
 	this.id = id;
 	this.elements = [];
 	this.attributes =[];
+	this.styles = [];
 	var self = this;
 
-	
-	this.initSlide = function()
-	{
-		this.addClass('slide');	//this.container
-	}
-	this.getElements = function(){
-		return self.elements;
-	}
-	this.setSlideProperty = function(property, propertyValue){
+	this.setSlideAttribute = function(property, propertyValue){
 		self.attributes.push(new Attribute(property, propertyValue));
 	}
 
