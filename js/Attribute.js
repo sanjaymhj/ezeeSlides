@@ -1,5 +1,5 @@
-function Attribute(property, propertyValue){
-	this.property = property;
-	this.propertyValue = propertyValue;
+function Attribute(attribute, attributeValue){
+	this.attribute = attribute;
+	this.attributeValue = attributeValue;
 	var self =this;
 }

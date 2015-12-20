@@ -76,16 +76,17 @@ function Tools(container){
 
 	var topTools = document.createElement('div');
 	topTools.setAttribute('class','slides-contianer');
-	var backgroundColor = document.createElement('input');
+	//var backgroundColor = document.createElement('input');
 	var focusSlide;
 	var focusElement;
 	
 	this.init = function(){
 		topTools.setAttribute('class', 'top-tools');
-		backgroundColor.setAttribute('class','controls');
-		backgroundColor.setAttribute('type','color');
+		// backgroundColor.setAttribute('class','controls');
+		// backgroundColor.setAttribute('type','color');
 
-		topTools.appendChild(backgroundColor);
+		// topTools.appendChild(backgroundColor);
+		var backgroundColor = new BackgroundColor(topTools,container);
 		var changePosition = new ChangePosition(topTools,container);
 		//changePosition.init();
 		var fontSize = new FontSize(topTools,container);
@@ -94,6 +95,7 @@ function Tools(container){
 		var underline = new Underline(topTools,container);
 		var textAlign = new TextAlign(topTools,container);
 		var fontColor = new FontColor(topTools,container);
+		var newText = new TextBox(topTools,container);
 
 
 		container.appendChild(topTools);
@@ -104,11 +106,6 @@ function Tools(container){
 		console.log(focusElement,"from tools focus Element",focusSlide," and this is the focusSlide");
 	}
 
-	backgroundColor.onchange = function(){
-		var changeBackground = new CustomEvent('changeBackground',{'detail':backgroundColor.value});
-		// console.log(backgroundColor.value);
-		container.dispatchEvent(changeBackground);
-	}
 	topTools.addEventListener('evtChangepositionX',function(e){console.log(e.detail);});
 }
 

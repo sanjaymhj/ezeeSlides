@@ -14,9 +14,9 @@ function EzeeUI()
 							{'attribute':'contentEditable','attributeValue':'true'}],
 						"styles":[
 							
-							{"property":"border","propertyValue":"2px solid black"},
+							// {"property":"border","propertyValue":"2px solid black"},
 							{"property":"top","propertyValue":"20%"},
-							{"property":"background","propertyValue":"red"},
+							{"property":"background-color","propertyValue":"red"},
 							{"property":"position","propertyValue":"absolute"},
 							{"property":"left","propertyValue":"25%"},
 							{"property":"width","propertyValue":"50%"},
@@ -33,7 +33,7 @@ function EzeeUI()
 						"attributes":[
 							{'attribute':'contentEditable','attributeValue':'true'}],
 						"styles":[
-							{"property":"background","propertyValue":"blue"},
+							{"property":"background-color","propertyValue":"blue"},
 							// {"property":"border","propertyValue":"2px dotted black"},
 							{"property":"top","propertyValue":"30%"},
 							{"property":"position","propertyValue":"absolute"},
@@ -49,7 +49,7 @@ function EzeeUI()
 
 						],
 					"styles":[
-						{"property":"background","propertyValue":"blue"},
+						// {"property":"background","propertyValue":"blue"},
 						{"property":"aoverflow","propertyValue":"hidden"},
 						{"property":"height","propertyValue":"100%"},
 
@@ -67,7 +67,7 @@ function EzeeUI()
 							{'attribute':'contentEditable','attributeValue':'true'},
 							{'attribute':'text','attributeValue':'Text Here'}],
 						"styles":[
-							{"property":"background","propertyValue":"cyan"},
+							{"property":"background-color","propertyValue":"cyan"},
 							{"property":"border","propertyValue":"2px solid black"},
 							{"property":"top","propertyValue":"50%"},
 							{"property":"position","propertyValue":"absolute"},
@@ -89,7 +89,7 @@ function EzeeUI()
 							{'attribute':'contentEditable','attributeValue':'true'},
 							{'attribute':'text','attributeValue':'Second Text Here'}],
 						"styles":[
-							{"property":"background","propertyValue":"blue"},
+							{"property":"background-color","propertyValue":"blue"},
 							{"property":"border","propertyValue":"2px dotted black"},
 							{"property":"top","propertyValue":"15%"},
 							{"property":"position","propertyValue":"absolute"},
@@ -131,12 +131,13 @@ this.getAllSlides = function(){return allSlides;}
 
 	function createLayout(){
 		leftBar.init();
-		tools.init();
 		centerArea.init();
 	}
 
 	
 	this.init();
+
+	
 
 	container.addEventListener('addSlide',function(e){
 		var slide = new Slide(allSlides.length);
@@ -152,51 +153,88 @@ this.getAllSlides = function(){return allSlides;}
 
 	});
 	container.addEventListener('activeElementEvent',function(e){	
-		focusElement = e.detail;
-		console.log(focusElement,"from main focusElement");
+		
+		if(focusElement>=0){
+			console.log("changing property of element",focusElement);
+			toggleProperty('','border');
+			focusElement = e.detail;
+			console.log("changing property of element",focusElement);
+			toggleProperty('2px solid black','border');
+			
+			console.log(focusElement,"from main focusElement");
+		}
+
+		else if(!focusElement){
+			tools.init();
+			focusElement = e.detail;
+			toggleProperty('2px solid blue','border');
+			console.log('emty focusElement');
+		}
 	});
 
 	container.addEventListener('changeBackground',function(e){
-		var backgroundExists=false;
-		for(var i=0;i<allSlides[focusSlide].elements[focusElement].styles.length;i++)
-		{
-			if(allSlides[focusSlide].elements[focusElement].styles[i].property == "background"){
-				allSlides[focusSlide].elements[focusElement].styles[i].propertyValue = e.detail;
-				console.log("background changed");
-				centerArea.changeWorkspace(allSlides[focusSlide]);
-				backgroundExists = true;
-			}
-		}
-		// if(!backgroundExists){
-		// 	allSlides[focusSlide.id].
-		// }
-		// console.log("in the main", focusSlide);
-		// centerArea.changeWorkspace(focusSlide);
+		changedProperty(e.detail,'background-color');
+	});
 
+	container.addEventListener('clearBackground',function(e){
+		toggleProperty(e.detail,'background-color');
 	});
+
 	container.addEventListener('changePositionX',function(e){
-		changedProperty(e.detail+'px','left');
+		changedProperty(e.detail+'%','left');
 	});
+
 	container.addEventListener('changePositionY',function(e){
-		changedProperty(e.detail+'px','top');
+		changedProperty(e.detail+'%','top');
 	});
+
 	container.addEventListener('changeFont',function(e){
 		changedProperty(e.detail+'%','font-size');
 	});
+
 	container.addEventListener('bold',function(e){
 		toggleProperty('bold','font-weight');
 	});
+
 	container.addEventListener('italics',function(e){
 		toggleProperty('italic','font-style');
 	});
+
 	container.addEventListener('underline',function(e){
 		toggleProperty('underline','text-decoration');
 	});
+
 	container.addEventListener('textAlign',function(e){
 		changedProperty(e.detail,'text-align');
 	});
+
 	container.addEventListener('fontColor',function(e){
 		changedProperty(e.detail,'color');
+	});
+
+
+
+
+	//add text in the workspace
+	container.addEventListener('createText',function(e){
+		//changedProperty(e.detail,'color');
+		var textElement = new Element('span',allSlides[focusSlide].elements.length);
+		textElement.setElementAttribute('contentEditable','true');
+		textElement.setText('Your Text Here');
+
+		//textElement.setElementAttribute('text','Your Text Here');
+		textElement.setElementStyle('top','0%');
+		textElement.setElementStyle('position','absolute');
+		textElement.setElementStyle('width','50%');
+		textElement.setElementStyle('font-size','100%');
+		textElement.setElementStyle('display','inline-block');
+
+		allSlides[focusSlide].elements.push(textElement);
+		console.log(allSlides[focusSlide].elements.length);
+		centerArea.changeWorkspace(allSlides[focusSlide]);
+		console.log("create New text place");
+
+
 	});
  
 	function changedProperty (propertyValue,property){
@@ -213,9 +251,9 @@ this.getAllSlides = function(){return allSlides;}
 		}
 		if(!propertyExists)
 		{
-			var newAttribute = new Attribute(property, propertyValue);
-			allSlides[focusSlide].elements[focusElement].styles.push(newAttribute);
-				centerArea.changeWorkspace(allSlides[focusSlide]);
+			var newStyle = new Style(property, propertyValue);
+			allSlides[focusSlide].elements[focusElement].styles.push(newStyle);
+			centerArea.changeWorkspace(allSlides[focusSlide]);
 
 		 	console.log("in the main - new property added", propertyValue,property);
 		}
@@ -235,8 +273,8 @@ this.getAllSlides = function(){return allSlides;}
 		}
 		if(!propertyExists)
 		{
-			var newAttribute = new Attribute(property, propertyValue);
-			allSlides[focusSlide].elements[focusElement].styles.push(newAttribute);
+			var newStyle = new Style(property, propertyValue);
+			allSlides[focusSlide].elements[focusElement].styles.push(newStyle);
 				centerArea.changeWorkspace(allSlides[focusSlide]);
 
 		 	console.log("in the main - new property added", propertyValue,property);
