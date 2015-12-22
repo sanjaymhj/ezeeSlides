@@ -1,8 +1,8 @@
 function TextBox(topTools,container){
 	var createTextBox = document.createElement('div');
-	createTextBox.setAttribute('class','btn-sm');
+	createTextBox.setAttribute('class','btn-md');
 
-	var text = document.createTextNode('T');
+	var text = document.createTextNode('New Text');
 	createTextBox.appendChild(text);
 
 	this.init = function(){

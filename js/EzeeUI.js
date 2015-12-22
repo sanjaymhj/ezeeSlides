@@ -4,7 +4,8 @@ function EzeeUI()
 	
 	container.setAttribute('class',"main-wrapper clearfix");
 	this.self = this;
-	var allSlides = [{
+	var allSlides = [];
+	var allSlides1 = [{
 					"id":0,
 					"elements":[{
 						"id":0,
@@ -116,6 +117,7 @@ function EzeeUI()
 		{"id":2,"elements":[],"attributes":[],"styles":[]}
 		];
 	var focusSlide;
+	var focusElementSlide;
 	var focusElement;
 
 	var leftBar = new LeftBar(container, allSlides);
@@ -132,6 +134,7 @@ this.getAllSlides = function(){return allSlides;}
 	function createLayout(){
 		leftBar.init();
 		centerArea.init();
+		tools.init();
 	}
 
 	
@@ -153,23 +156,40 @@ this.getAllSlides = function(){return allSlides;}
 
 	});
 	container.addEventListener('activeElementEvent',function(e){	
-		
-		if(focusElement>=0){
-			console.log("changing property of element",focusElement);
-			toggleProperty('','border');
-			focusElement = e.detail;
-			console.log("changing property of element",focusElement);
-			toggleProperty('2px solid black','border');
+		console.log(focusElement,"first one");
+		if(focusElement)
+		{
+			console.log("focusElement exists");
+			console.log('old focusSlide ',focusElementSlide,'old element',focusElement.elementId);
+			/////////get the text changes
+			//console.log(focusElementSlide.elements[focusElement.elementId].text);
 			
-			console.log(focusElement,"from main focusElement");
+			// focusElement = e.detail.elementId;
+			// focusElementSlide = e.detail.slideId;
 		}
+		else{
+			console.log("focusElement doesnot exists");
+			console.log('focusElement now',focusElement);
 
-		else if(!focusElement){
-			tools.init();
-			focusElement = e.detail;
-			toggleProperty('2px solid blue','border');
-			console.log('emty focusElement');
+			// focusElement = e.detail.elementId;
+			// focusElementSlide = e.detail.slideId;
+
 		}
+		
+		focusElementSlide = focusSlide;
+		focusElement = e.detail.elementId;
+	
+	});
+
+	container.addEventListener('textChange',function(e){
+		allSlides[focusSlide].elements[focusElement].setText(e.detail);
+		console.log(allSlides[focusSlide].elements[focusElement].text, 'is text after change');
+	});
+	container.addEventListener('changeWidth',function(e){
+		changedProperty(e.detail+'px','width');
+	});
+	container.addEventListener('changeHeight',function(e){
+		changedProperty(e.detail+'px','height');
 	});
 
 	container.addEventListener('changeBackground',function(e){
@@ -212,6 +232,12 @@ this.getAllSlides = function(){return allSlides;}
 		changedProperty(e.detail,'color');
 	});
 
+
+
+	container.addEventListener('startSlide',function(e){
+		centerArea.clearWorkspace();
+		startSlide();
+	});
 
 
 
@@ -280,6 +306,45 @@ this.getAllSlides = function(){return allSlides;}
 		 	console.log("in the main - new property added", propertyValue,property);
 		}
 	}
+
+	function startSlide(){
+		
+		for(var x=0;x<allSlides.length;x++){
+			var mainSlide = document.createElement('div');
+			mainSlide.setAttribute('class','slide');
+			for(var i=0;i<allSlides[x].styles.length;i++){
+				mainSlide.style[allSlides[x].styles[i].property]=allSlides[x].styles[i].propertyValue;
+			}
+
+			for(var i=0;i<allSlides[x].elements.length;i++){
+				var element = document.createElement(allSlides[x].elements[i].type);
+				// if(focusSlide.elements[i].type == 'span')
+				// {
+					//var text = document.createTextNode(focusSlide.elements[i].text);
+					element.innerHTML = allSlides[x].elements[i].text;
+					//element.appendChild(text);
+				// }
+				for(var j=0;j<allSlides[x].elements[i].attributes.length;j++)
+				{
+					element.setAttribute(allSlides[x].elements[i].attributes[j].attribute,allSlides[x].elements[i].attributes[j].attributeValue);
+				}
+
+				//console.log(allSlides[x].elements[i].type);
+				for(var j=0;j<allSlides[x].elements[i].styles.length;j++)
+				{
+					element.style[allSlides[x].elements[i].styles[j].property]=allSlides[x].elements[i].styles[j].propertyValue;
+				}
+				mainSlide.appendChild(element);
+			}	
+
+			centerArea.setupSlides(mainSlide);
+
+		}
+		//slideArea.appendChild(mainSlide);
+		console.log(mainSlide);
+	}
+
+	
 
 
 

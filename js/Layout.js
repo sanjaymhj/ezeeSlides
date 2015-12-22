@@ -19,7 +19,7 @@ function LeftBar(container,slides){
 		self.addSlide.setAttribute('class','add-slides');
 		self.startSlide.setAttribute('class','start-slideshow');
 		
-		//startSlide.addEventListener('click', function(){slideShow();});
+		self.startSlide.addEventListener('click', function(){self.slideShow();});
 
 
 		self.addSlide.onclick =  function(){
@@ -59,16 +59,14 @@ function LeftBar(container,slides){
 		container.appendChild(self.leftBar);
 
 	}
+	this.slideShow = function(){
+		var startSlide = new CustomEvent('startSlide',{});
+		container.dispatchEvent(startSlide);
+	}
 
 	this.getCounter = function(){
 		return self.slideCounter;
 	}
-
-	
-	this.addSlides = function(){
-		console.log("123");
-	}
-
 }
 
 
@@ -87,6 +85,7 @@ function Tools(container){
 
 		// topTools.appendChild(backgroundColor);
 		var backgroundColor = new BackgroundColor(topTools,container);
+		var divSize = new ChangeHeightWidth(topTools,container);
 		var changePosition = new ChangePosition(topTools,container);
 		//changePosition.init();
 		var fontSize = new FontSize(topTools,container);
@@ -96,7 +95,6 @@ function Tools(container){
 		var textAlign = new TextAlign(topTools,container);
 		var fontColor = new FontColor(topTools,container);
 		var newText = new TextBox(topTools,container);
-
 
 		container.appendChild(topTools);
 	}
@@ -120,12 +118,17 @@ function CenterArea(container){
 		container.appendChild(slideArea);
 	}
 
-	this.changeWorkspace = function(focusSlide){
+	this.clearWorkspace = function(){
 		while (slideArea.hasChildNodes()) {
 		    slideArea.removeChild(slideArea.lastChild);
 		}
+	};
+
+	this.changeWorkspace = function(focusSlide){
+		self.clearWorkspace();
 		console.log(focusSlide,"from the center area");
 		var mainSlide = document.createElement('div');
+		mainSlide.setAttribute('class','slide');
 		for(var i=0;i<focusSlide.styles.length;i++){
 			mainSlide.style[focusSlide.styles[i].property]=focusSlide.styles[i].propertyValue;
 		}
@@ -134,8 +137,9 @@ function CenterArea(container){
 			var element = document.createElement(focusSlide.elements[i].type);
 			// if(focusSlide.elements[i].type == 'span')
 			// {
-				var text = document.createTextNode(focusSlide.elements[i].text);
-				element.appendChild(text);
+				//var text = document.createTextNode(focusSlide.elements[i].text);
+				element.innerHTML = focusSlide.elements[i].text;
+				//element.appendChild(text);
 			// }
 			for(var j=0;j<focusSlide.elements[i].attributes.length;j++)
 			{
@@ -150,16 +154,24 @@ function CenterArea(container){
 			mainSlide.appendChild(element);
 			element.onclick = (function(el){
 				return function(){
-					var activeElementEvent = new CustomEvent('activeElementEvent',{detail:el});
+					var activeElementEvent = new CustomEvent('activeElementEvent',{detail:{'elementId':el,'slideId':focusSlide.id}});
 					container.dispatchEvent(activeElementEvent);
 				}
 			})(i);
 			
 
+			element.onkeypress = function(e){
+				var evt = e || window.event;
+				var textChanged = new CustomEvent('textChange',{'detail':this.innerHTML+String.fromCharCode(evt.which)});
+				container.dispatchEvent(textChanged);
+			}
 		}	
 		slideArea.appendChild(mainSlide);
 		console.log(slideArea);
 	};
+	this.setupSlides = function(mainSlide){
+		slideArea.appendChild(mainSlide);
+	}
 
 	
 }

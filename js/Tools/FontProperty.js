@@ -3,6 +3,8 @@ function FontSize(parentElements,container){
 	var container = container;
 	this.init = function(){
 		var changeFont = document.createElement('input');
+		var label = document.createTextNode('Font-size');
+		parentElements.appendChild(label);
 		changeFont.setAttribute('type','number');
 		changeFont.setAttribute('class','tools fontsize');
 		parentElement.appendChild(changeFont);

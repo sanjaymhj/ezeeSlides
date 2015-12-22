@@ -2,6 +2,8 @@ function ChangePosition(parentElements,container){
 	var parentElement = parentElements;
 	var container = container;
 	this.init = function(){
+		var label = document.createTextNode('Position');
+		parentElements.appendChild(label);
 		var changePositionX = document.createElement('input');
 		changePositionX.setAttribute('type','number');
 		changePositionX.setAttribute('class','tools change-position');
