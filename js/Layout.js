@@ -7,6 +7,10 @@ function LeftBar(container,slides){
 	this.startText = document.createTextNode('S');	
 	this.startSlide = document.createElement('div');
 
+	this.exportText = document.createTextNode('E');
+	this.exportSlide = document.createElement('div');
+	this.exportSlide.appendChild(this.exportText);
+
 	this.slideCounter=0;
 
 	var self = this;
@@ -18,20 +22,27 @@ function LeftBar(container,slides){
 		self.slidesContainer.setAttribute('class','slides-container');
 		self.addSlide.setAttribute('class','add-slides');
 		self.startSlide.setAttribute('class','start-slideshow');
+		self.exportSlide.setAttribute('class','export-slide');
 		
 		self.startSlide.addEventListener('click', function(){self.slideShow();});
+
+		self.exportSlide.addEventListener('click', function(){
+			var exportEvent = new CustomEvent('exportSlide',{});
+			container.dispatchEvent(exportEvent);
+
+		});
 
 
 		self.addSlide.onclick =  function(){
 			console.log(self.slideCounter,"number of slides in the array before adding new one");
-					var ev1 = new CustomEvent('addSlide',{'detail':self.slideCounter});
-					
-					container.dispatchEvent(ev1);//js variable
-					self.slidesContainer.dispatchEvent(ev1);//ui
-					self.slideCounter++;
-					console.log(self.slideCounter,"number of slides in the array after adding new one");
+				var ev1 = new CustomEvent('addSlide',{'detail':self.slideCounter});
+				
+				container.dispatchEvent(ev1);//js variable
+				self.slidesContainer.dispatchEvent(ev1);//ui
+				self.slideCounter++;
+				console.log(self.slideCounter,"number of slides in the array after adding new one");
 
-				}
+		}
 
 		self.slidesContainer.addEventListener('addSlide',function(e){
 
@@ -54,6 +65,8 @@ function LeftBar(container,slides){
 		});
 
 		self.leftBar.appendChild(self.startSlide);
+		self.leftBar.appendChild(self.exportSlide);
+
 		self.leftBar.appendChild(self.slidesContainer);
 		self.leftBar.appendChild(self.addSlide);
 		container.appendChild(self.leftBar);
@@ -80,27 +93,33 @@ function Tools(container){
 	
 	this.init = function(){
 		topTools.setAttribute('class', 'top-tools');
-		// backgroundColor.setAttribute('class','controls');
-		// backgroundColor.setAttribute('type','color');
-
-		// topTools.appendChild(backgroundColor);
-		var backgroundColor = new BackgroundColor(topTools,container);
+		
+		var slideBackground = new SlideBackgroundColor(topTools,container);
+		
+		var transition = new Transition(topTools,container);
+		topTools.appendChild(document.createElement('div'));
+		var newText = new TextBox(topTools,container);
+		
 		var divSize = new ChangeHeightWidth(topTools,container);
 		var changePosition = new ChangePosition(topTools,container);
-		//changePosition.init();
+		var fontFamily = new FontFamily(topTools,container);
 		var fontSize = new FontSize(topTools,container);
 		var bold = new Bold(topTools,container);
 		var italics = new Italics(topTools,container);
 		var underline = new Underline(topTools,container);
+		var backgroundColor = new BackgroundColor(topTools,container);
 		var textAlign = new TextAlign(topTools,container);
 		var fontColor = new FontColor(topTools,container);
-		var newText = new TextBox(topTools,container);
+				topTools.appendChild(document.createElement('div'));
 
+		var elementTransition = new ElementTransition(topTools, container);
+		
 		container.appendChild(topTools);
 	}
 	this.changeFocusSlide =  function(focusEle){
 		focusElement = focusEle;
 		focusSlide = focusEle;
+		
 		console.log(focusElement,"from tools focus Element",focusSlide," and this is the focusSlide");
 	}
 
@@ -139,6 +158,7 @@ function CenterArea(container){
 			// {
 				//var text = document.createTextNode(focusSlide.elements[i].text);
 				element.innerHTML = focusSlide.elements[i].text;
+				element.setAttribute('id',i);
 				//element.appendChild(text);
 			// }
 			for(var j=0;j<focusSlide.elements[i].attributes.length;j++)
@@ -171,6 +191,9 @@ function CenterArea(container){
 	};
 	this.setupSlides = function(mainSlide){
 		slideArea.appendChild(mainSlide);
+		slideArea.onkeypress = function(){
+				console.log("dfhklajsh liuah eaiwu hailsdf");
+			}
 	}
 
 	

@@ -5,6 +5,8 @@ function Element(elementType,id){
 	this.text;
 	this.attributes = [];
 	this.styles = [];
+	this.transitionIn = 'None';
+	this.transitionOut = 'None';
 	var self = this;
 
 	this.setText = function(text){
@@ -14,11 +16,21 @@ function Element(elementType,id){
 	this.setElementAttribute = function(attribute, attributeValue){
 		self.attributes.push(new Attribute(attribute, attributeValue));
 	}
+
 	this.changeText = function(value){
 		self.text = value;
 	}
+
 	this.setElementStyle = function(property, propertyValue){
 		self.styles.push(new Style(property, propertyValue));
+	}
+
+	this.setTransitionIn = function(transition){
+		self.transitionIn = transition;
+	}
+
+	this.setTransitionOut = function(transition){
+		self.transitionOut = transition;
 	}
 
 }
