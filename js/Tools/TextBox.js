@@ -1,11 +1,12 @@
 function TextBox(topTools,container){
 	var createTextBox = document.createElement('div');
-	createTextBox.setAttribute('class','btn-md');
+	createTextBox.setAttribute('class','btn-md next');
 
 	var text = document.createTextNode('New Text');
 	createTextBox.appendChild(text);
 
 	this.init = function(){
+		
 		topTools.appendChild(createTextBox);
 		createTextBox.onclick = function(){
 			var createText = new CustomEvent('createText',{'detail':''});

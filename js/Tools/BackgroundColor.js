@@ -3,19 +3,22 @@ function BackgroundColor(topTools,container){
 	var backgroundColorInput = document.createElement('input');
 	var clearBackgroundColor = document.createElement('div');
 	backgroundColor.style['display'] = 'inline-block';
-	clearBackgroundColor.style['width'] = '50px';
-	clearBackgroundColor.style['height'] = '50px';
-	backgroundColorInput.setAttribute('class','controls');
+	clearBackgroundColor.setAttribute('class','btn-md');
+
+	clearBackgroundColor.style['margin'] = '5px';
+	clearBackgroundColor.style['height'] = '25px';
+
 	backgroundColorInput.setAttribute('type','color');
-	clearBackgroundColor.appendChild(document.createTextNode('C'));
+	clearBackgroundColor.appendChild(document.createTextNode('Clear'));
 	this.init = function(){
+		backgroundColor.appendChild(document.createTextNode('Background-Color : '));
 		backgroundColor.appendChild(backgroundColorInput);
 		backgroundColor.appendChild(clearBackgroundColor);
 
 
-		topTools.appendChild(backgroundColor);
+		topTools.appendChild(backgroundColor); 
 	}
-	backgroundColorInput.onchange = function(){
+	backgroundColorInput.onclick = function(){
 		var changeBackground = new CustomEvent('changeBackground',{'detail':backgroundColorInput.value});
 		// console.log(backgroundColor.value);
 		container.dispatchEvent(changeBackground);

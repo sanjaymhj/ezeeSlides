@@ -2,6 +2,7 @@ function LeftBar(container,slides){
 	this.leftBar = document.createElement('div');
 	this.slidesContainer = document.createElement('div');
 	this.addSlide = document.createElement('div');
+	var thumbSlide=[];
 	this.addText = document.createTextNode('+');
 
 	this.startText = document.createTextNode('S');	
@@ -14,6 +15,35 @@ function LeftBar(container,slides){
 	this.slideCounter=0;
 
 	var self = this;
+	this.updateContainer = function(allSlides){
+
+		while (self.slidesContainer.hasChildNodes()) {
+		    self.slidesContainer.removeChild(self.slidesContainer.lastChild);
+		}
+
+		for (var i=0;i<allSlides.length;i++){
+			var slide = document.createElement('div');
+				//console.log(e.detail,"from slide addition in view");
+			slide.setAttribute('class','slides-thumbnail' );
+			for(var j=0;j<allSlides[i].styles.length;j++){
+				slide.style[allSlides[i].styles[j].property]=allSlides[i].styles[j].propertyValue;
+				console.log('wiritin the property');
+			}
+					
+		
+			slide.onclick = (function(slideId){
+				return function(){
+					console.log(slideId,"slideid from left bar");
+					var toWorkspace = new CustomEvent('slideToWorkSpace',{'detail':slideId});
+					console.log(i, 'th slide selected');
+					container.dispatchEvent(toWorkspace);
+				};} )(i);
+
+				thumbSlide.push(slide);
+			self.slidesContainer.appendChild(slide);	
+		}
+	}
+
 	this.init = function(){
 		self.startSlide.appendChild(self.startText);
 		self.addSlide.appendChild(self.addText);
@@ -35,12 +65,12 @@ function LeftBar(container,slides){
 
 		self.addSlide.onclick =  function(){
 			console.log(self.slideCounter,"number of slides in the array before adding new one");
-				var ev1 = new CustomEvent('addSlide',{'detail':self.slideCounter});
-				
-				container.dispatchEvent(ev1);//js variable
-				self.slidesContainer.dispatchEvent(ev1);//ui
-				self.slideCounter++;
-				console.log(self.slideCounter,"number of slides in the array after adding new one");
+			var ev1 = new CustomEvent('addSlide',{'detail':self.slideCounter});
+			
+			container.dispatchEvent(ev1);//js variable
+			self.slidesContainer.dispatchEvent(ev1);//ui
+			self.slideCounter++;
+			console.log(self.slideCounter,"number of slides in the array after adding new one");
 
 		}
 
@@ -59,9 +89,10 @@ function LeftBar(container,slides){
 					container.dispatchEvent(toWorkspace);
 				};} )(e.detail);
 
-			self.slidesContainer.appendChild(slide);
-			//console.log(slidesContainer);
-			
+				thumbSlide.push(slide);
+			self.slidesContainer.appendChild(thumbSlide[thumbSlide.length-1]);	
+
+
 		});
 
 		self.leftBar.appendChild(self.startSlide);
@@ -87,6 +118,7 @@ function Tools(container){
 
 	var topTools = document.createElement('div');
 	topTools.setAttribute('class','slides-contianer');
+
 	//var backgroundColor = document.createElement('input');
 	var focusSlide;
 	var focusElement;
@@ -94,14 +126,26 @@ function Tools(container){
 	this.init = function(){
 		topTools.setAttribute('class', 'top-tools');
 		
+		var div1=document.createElement('div');
+		div1.appendChild(document.createTextNode('Slide Styles'));
+		div1.setAttribute('class','tool-seperator');
+		
+		topTools.appendChild(div1);
+		topTools.appendChild(document.createTextNode(' Background-Color : '));
+
+
 		var slideBackground = new SlideBackgroundColor(topTools,container);
 		
 		var transition = new Transition(topTools,container);
-		topTools.appendChild(document.createElement('div'));
+		var deleteSlide = new DeleteSlide(topTools,container);
+			
+		var div2=document.createElement('div');
+		div2.appendChild(document.createTextNode('Text Styles'));
+		div2.setAttribute('class','tool-seperator');
+		topTools.appendChild(div2);
 		var newText = new TextBox(topTools,container);
-		
-		var divSize = new ChangeHeightWidth(topTools,container);
-		var changePosition = new ChangePosition(topTools,container);
+		var divSize = new ChangeSize(topTools,container);	
+		var changePosition = new ChangePosition(topTools,container);		
 		var fontFamily = new FontFamily(topTools,container);
 		var fontSize = new FontSize(topTools,container);
 		var bold = new Bold(topTools,container);
@@ -110,10 +154,9 @@ function Tools(container){
 		var backgroundColor = new BackgroundColor(topTools,container);
 		var textAlign = new TextAlign(topTools,container);
 		var fontColor = new FontColor(topTools,container);
-				topTools.appendChild(document.createElement('div'));
-
 		var elementTransition = new ElementTransition(topTools, container);
 		
+		var deleteElement = new DeleteElement(topTools,container);
 		container.appendChild(topTools);
 	}
 	this.changeFocusSlide =  function(focusEle){
@@ -130,12 +173,18 @@ function Tools(container){
 function CenterArea(container){
 	var slideArea = document.createElement('div');
 	var self = this;
+	var slide;
+	var allElements = [];
 	var initialMessage = document.createTextNode("Select the Slide to edit.");
 	this.init = function(){
-		slideArea.setAttribute('class','slides-area');
+		slideArea.setAttribute('class','slides-area no-slide');
 		slideArea.appendChild(initialMessage);
 		container.appendChild(slideArea);
 	}
+	this.slideAdded = function(){
+		slideArea.setAttribute('class','slide-area slide-added')
+	}
+
 
 	this.clearWorkspace = function(){
 		while (slideArea.hasChildNodes()) {
@@ -151,6 +200,7 @@ function CenterArea(container){
 		for(var i=0;i<focusSlide.styles.length;i++){
 			mainSlide.style[focusSlide.styles[i].property]=focusSlide.styles[i].propertyValue;
 		}
+		allElements = [];
 		//console.log(focusSlide)
 		for(var i=0;i<focusSlide.elements.length;i++){
 			var element = document.createElement(focusSlide.elements[i].type);
@@ -185,9 +235,12 @@ function CenterArea(container){
 				var textChanged = new CustomEvent('textChange',{'detail':this.innerHTML+String.fromCharCode(evt.which)});
 				container.dispatchEvent(textChanged);
 			}
+			allElements.push(element);
 		}	
+		console.log(allElements);
 		slideArea.appendChild(mainSlide);
 		console.log(slideArea);
+		self.slide = mainSlide;
 	};
 	this.setupSlides = function(mainSlide){
 		slideArea.appendChild(mainSlide);
@@ -195,6 +248,12 @@ function CenterArea(container){
 				console.log("dfhklajsh liuah eaiwu hailsdf");
 			}
 	}
+	this.getSlide = function(){
+		return self.slide;
+	}
 
+	this.getAllElements = function(){
+		return allElements;
+	}
 	
 }

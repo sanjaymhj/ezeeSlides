@@ -3,11 +3,13 @@ function SlideBackgroundColor(topTools,container){
 	var slidebackgroundColorInput = document.createElement('input');
 	var slideclearBackgroundColor = document.createElement('div');
 	slidebackgroundColor.style['display'] = 'inline-block';
-	slideclearBackgroundColor.style['width'] = '25px';
+	//slideclearBackgroundColor.style['width'] = '25px';
+	slideclearBackgroundColor.setAttribute('class','btn-md');
+	slideclearBackgroundColor.style['margin'] = '5px';
 	slideclearBackgroundColor.style['height'] = '25px';
-	slidebackgroundColorInput.setAttribute('class','controls');
+	//slidebackgroundColorInput.setAttribute('class','controls');
 	slidebackgroundColorInput.setAttribute('type','color');
-	slideclearBackgroundColor.appendChild(document.createTextNode('C'));
+	slideclearBackgroundColor.appendChild(document.createTextNode('Clear'));
 	
 	this.init = function(){
 		slidebackgroundColor.appendChild(slidebackgroundColorInput);
@@ -16,7 +18,7 @@ function SlideBackgroundColor(topTools,container){
 		topTools.appendChild(slidebackgroundColor);
 	}
 
-	slidebackgroundColorInput.onchange = function(){
+	slidebackgroundColorInput.onclick = function(){
 		var slidechangeBackground = new CustomEvent('slidechangeBackground',{'detail':slidebackgroundColorInput.value});
 		// console.log(slidebackgroundColor.value);
 		console.log("change inside the class");

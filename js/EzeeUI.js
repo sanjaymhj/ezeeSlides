@@ -5,120 +5,12 @@ function EzeeUI()
 	container.setAttribute('class',"main-wrapper clearfix");
 	this.self = this;
 	var allSlides = [];
-	//var allSlides = [{"id":0,"elements":[{"id":0,"type":"span","attributes":[{"attribute":"contentEditable","attributeValue":"true"}],"styles":[{"property":"top","propertyValue":"0%"},{"property":"position","propertyValue":"absolute"},{"property":"width","propertyValue":"740px"},{"property":"font-size","propertyValue":"100%"},{"property":"display","propertyValue":"inline-block"},{"property":"height","propertyValue":"555px"},{"property":"background-color","propertyValue":"#8080ff"}],"text":"Your Text Here"}],"attributes":[],"styles":[]},{"id":1,"elements":[{"id":0,"type":"span","attributes":[{"attribute":"contentEditable","attributeValue":"true"}],"styles":[{"property":"top","propertyValue":"0%"},{"property":"position","propertyValue":"absolute"},{"property":"width","propertyValue":"740px"},{"property":"font-size","propertyValue":"100%"},{"property":"display","propertyValue":"inline-block"},{"property":"height","propertyValue":"555px"},{"property":"background-color","propertyValue":"#0080ff"}],"text":"Your Text Here"}],"attributes":[],"styles":[]}];
-	var allSlides2= [{
-					"id":0,
-					"elements":[{
-						"id":0,
-						"type":'span',
-						"text":'The first Text',
-						"attributes":[
-							{'attribute':'contentEditable','attributeValue':'true'}],
-						"styles":[
-							// {"property":"border","propertyValue":"2px solid black"},
-							{"property":"top","propertyValue":"20%"},
-							{"property":"background-color","propertyValue":"red"},
-							{"property":"position","propertyValue":"absolute"},
-							{"property":"left","propertyValue":"25%"},
-							{"property":"width","propertyValue":"50%"},
-							{"property":"display","propertyValue":"inline-block"},
-							{"property":"contentEditable","propertyValue":"true"},
-							{"property":"font-size","propertyValue":"36px"},
-
-							]
-						},
-						{
-						"id":1,
-						"type":'span',
-						"text":'The first slide second text',
-						"attributes":[
-							{'attribute':'contentEditable','attributeValue':'true'}],
-						"styles":[
-							{"property":"background-color","propertyValue":"blue"},
-							// {"property":"border","propertyValue":"2px dotted black"},
-							{"property":"top","propertyValue":"30%"},
-							{"property":"position","propertyValue":"absolute"},
-							{"property":"left","propertyValue":"25%"},
-							{"property":"width","propertyValue":"50%"},
-							{"property":"display","propertyValue":"inline-block"},
-							{"property":"contentEditable","propertyValue":"true"},
-							
-
-							]
-						}
-
-
-						],
-					"styles":[
-						// {"property":"background","propertyValue":"blue"},
-						{"property":"aoverflow","propertyValue":"hidden"},
-						{"property":"height","propertyValue":"100%"},
-
-
-						{"property":"width","propertyValue":"100%"},
-						{"property":"position","propertyValue":"arelative"}]
-					},
-						{
-					"id":1,
-					"elements":[{
-						"id":0,
-						"type":'div',
-						"text":'The first Text',
-						"attributes":[
-							{'attribute':'contentEditable','attributeValue':'true'},
-							{'attribute':'text','attributeValue':'Text Here'}],
-						"styles":[
-							{"property":"background-color","propertyValue":"cyan"},
-							{"property":"border","propertyValue":"2px solid black"},
-							{"property":"top","propertyValue":"50%"},
-							{"property":"position","propertyValue":"absolute"},
-							{"property":"left","propertyValue":"50%"},
-							{"property":"width","propertyValue":"50%"},
-							{"property":"display","propertyValue":"inline-block"},
-							{"property":"contentEditable","propertyValue":"true"},
-							{"property":"font-size","propertyValue":"200%"},
-
-						
-
-							]
-						},
-{
-						"id":1,
-						"type":'div',
-						"text":'The second Text',
-						"attributes":[
-							{'attribute':'contentEditable','attributeValue':'true'},
-							{'attribute':'text','attributeValue':'Second Text Here'}],
-						"styles":[
-							{"property":"background-color","propertyValue":"blue"},
-							{"property":"border","propertyValue":"2px dotted black"},
-							{"property":"top","propertyValue":"15%"},
-							{"property":"position","propertyValue":"absolute"},
-							{"property":"left","propertyValue":"20%"},
-							{"property":"width","propertyValue":"50%"},
-							{"property":"display","propertyValue":"inline-block"},
-							{"property":"contentEditable","propertyValue":"true"},
-							
-
-							]
-						}
-
-
-										],
-									"styles":[
-										{"property":"background","propertyValue":"blue"},
-										{"property":"aoverflow","propertyValue":"hidden"},
-										{"property":"height","propertyValue":"100%"},
-
-
-										{"property":"width","propertyValue":"100%"},
-										{"property":"posaition","propertyValue":"a"}]
-									},
-						{"id":2,"elements":[],"attributes":[],"styles":[]}
-						];
+	
 	var focusSlide;
 	var focusElementSlide;
 	var focusElement;
+	var workSlide;
+	var workElements = [];
 
 	var leftBar = new LeftBar(container, allSlides);
 	var tools = new Tools(container);
@@ -128,29 +20,58 @@ function EzeeUI()
 		
 
 	this.getAllSlides = function(){return allSlides;}//for dev
-
+	
 	this.init = function() {
 		createLayout();
 		document.body.appendChild(container);	
 	}
-
+this.init();
 	function createLayout(){
 		leftBar.init();
 		centerArea.init();
 		tools.init();
 	}
 
-	
-	this.init();
-
-	
-
 	container.addEventListener('addSlide',function(e){
 		var slide = new Slide(allSlides.length);
 		allSlides.push(slide);
-
+		//centerArea.slideAdded();
 		console.log(allSlides);
 	});
+
+	container.addEventListener('deleteElement',function(e){
+		console.log('delete this ', allSlides[focusSlide].elements[focusElement]);
+		allSlides[focusSlide].elements.splice(focusElement,1);
+		focusElement--;
+		if(focusElement<0)
+		{
+			centerArea.changeWorkspace(allSlides[focusSlide]);
+		}
+		else{
+			focusElement = 0;
+		}
+
+	});
+
+	container.addEventListener('deleteSlide',function(e){
+		console.log('delete this ', allSlides[focusSlide]);
+		allSlides.splice(focusSlide,1);
+		console.log(allSlides,"remaining slides after deleting");
+		if(allSlides.length>0)
+			leftBar.updateContainer(allSlides);
+		focusSlide--;
+		
+		if(focusSlide > 0 )
+		{
+			centerArea.changeWorkspace(allSlides[focusSlide]);
+		}
+		else{
+			focusSlide = 0;
+			centerArea.clearWorkspace();
+		}
+		
+	});
+	this.getWorkElements = function(){return workElements};
 
 	container.addEventListener('slideToWorkSpace',function(e){
 		focusSlide = e.detail;
@@ -159,7 +80,13 @@ function EzeeUI()
 		//tools.init();
 		console.log("in the main focusSlide.id", focusSlide);
 		centerArea.changeWorkspace(allSlides[focusSlide]);
+		workSlide = centerArea.getSlide();
+		workElements = centerArea.getAllElements();
+		console.log(workElements,"allElements From");
+		
+		
 	});
+
 	container.addEventListener('activeElementEvent',function(e){	
 		console.log(focusElement,"first one");
 		if(focusElement)
@@ -174,6 +101,8 @@ function EzeeUI()
 		
 		focusElementSlide = focusSlide;
 		focusElement = e.detail.elementId;
+		
+
 	
 	});
 
@@ -183,7 +112,7 @@ function EzeeUI()
 	});
 
 	container.addEventListener('exportSlide',function(e){
-		document.getElementById('jsonHolder').innerHTML = JSON.stringify(allSlides);
+		//document.getElementById('jsonHolder').innerHTML = JSON.stringify(allSlides);
 		var copied =JSON.stringify(allSlides);// document.getElementById('jsonHolder').createTextRange();
 		//e.clipboardData.setData('text/plain', 'Hello, world!');
 		//copied.execCommand("Copy");
@@ -196,60 +125,56 @@ function EzeeUI()
 
 	});
 	document.addEventListener('copy',function(e){   // e.clipboardData.setData('application/json', JSON.stringify(allSlides));
-		alert('copied',JSON.stringify(allSlides));
+		alert('copied'+JSON.stringify(allSlides));
+		e.clipboardData.setData('text/plain', JSON.stringify(allSlides));
+		e.preventDefault();
 });
 
 	container.addEventListener('transitionIn',function(e){
-		var slid = document.getElementsByClassName('slide')[0];
-		
 		console.log(e.detail, 'is transition change');
 		allSlides[focusSlide].setTransitionIn(e.detail);
-		slid.setAttribute('class','slide animated '+e.detail);
-		slid.addEventListener("animationend", function(){
-			slid.setAttribute('class','slide');// animated '+document.getElementsByClassName('slide')[0].transitionIn);
+		workSlide.setAttribute('class','slide animated '+e.detail);
+		workSlide.addEventListener("animationend", function(){
+			workSlide.setAttribute('class','slide');// animated '+document.getElementsByClassName('slide')[0].transitionIn);
 		}, false);
 	});
 
 	container.addEventListener('transitionOut',function(e){
-		var slid = document.getElementsByClassName('slide')[0];
+		
 		console.log(e.detail, 'is transition change');
 		allSlides[focusSlide].setTransitionOut(e.detail);
 		console.log(allSlides[focusSlide].transitionOut);
-		slid.setAttribute('class','slide animated '+e.detail);
-		slid.addEventListener("animationend", function(){
-								slid.setAttribute('class','slide');// animated '+document.getElementsByClassName('slide')[0].transitionIn);
-						}, false);
+		workSlide.setAttribute('class','slide animated '+e.detail);
+		workSlide.addEventListener("animationend", function(){
+			workSlide.setAttribute('class','slide');// animated '+document.getElementsByClassName('slide')[0].transitionIn);
+		}, false);
 	});
 
 	container.addEventListener('elementTransitionIn',function(e){
+				workElements = centerArea.getAllElements();
+
 		console.log(e.detail, 'is element transition change in');
+
 		allSlides[focusSlide].elements[focusElement].setTransitionIn(e.detail);
-		debugger;
 		//console.log('transition set to ',e.detail);
 		console.log('transition set to ',allSlides[focusSlide].elements[focusElement].transitionIn);
-		debugger;
-		document.getElementById(focusElement).setAttribute('class','animated '+e.detail);
-		document.getElementById(focusElement).addEventListener('animationend',function(){document.getElementById(focusElement).setAttribute('class','');});
-
-		// allSlides[focusSlide].setTransitionIn(e.detail);
-		// document.getElementsByClassName('slide')[0].setAttribute('class','slide animated '+e.detail);
-		// document.getElementsByClassName('slide')[0].addEventListener("animationend", function(){
-		// 	document.getElementsByClassName('slide')[0].setAttribute('class','slide');// animated '+document.getElementsByClassName('slide')[0].transitionIn);
-		// }, false);
+		console.log(workElements,' getting all elements from element transition');
+		
+		console.log(workElements,'elements to be animated');
+		workElements[focusElement].setAttribute('class','animated '+e.detail);
+		//workElements[focusElement].addEventListener('animationend',function(){workElements[focusElement].setAttribute('class','');});
 	});
 
 	container.addEventListener('elementTransitionOut',function(e){
-		console.log(e.detail, 'is element stransition change');
-		// allSlides[focusSlide].setTransitionOut(e.detail);
-		// document.getElementsByClassName('slide')[0].setAttribute('class','slide animated '+e.detail);
-		// document.getElementsByClassName('slide')[0].addEventListener("animationend", function(){
-		// 						document.getElementsByClassName('slide')[0].setAttribute('class','slide');// animated '+document.getElementsByClassName('slide')[0].transitionIn);
-		// 				}, false);
-	});
+				workElements = centerArea.getAllElements();
 
-	container.addEventListener('transitionOut',function(e){
-		console.log(e.detail, 'is transition change');
-		allSlides[focusSlide].setTransitionOut(e.detail);
+		console.log(e.detail, 'is element transition change out');
+		allSlides[focusSlide].elements[focusElement].setTransitionOut(e.detail);
+		
+		//console.log('transition set to ',e.detail);
+		console.log('transition set to ',allSlides[focusSlide].elements[focusElement].transitionOut);
+		workElements[focusElement].setAttribute('class','animated '+e.detail);
+		workElements[focusElement].addEventListener('animationend',function(){workElements[focusElement].setAttribute('class','');});
 	});
 
 	container.addEventListener('textChange',function(e){
@@ -419,12 +344,9 @@ var slideStarted = false;
 
 	//add text in the workspace
 	container.addEventListener('createText',function(e){
-		//changedProperty(e.detail,'color');
 		var textElement = new Element('span',allSlides[focusSlide].elements.length);
 		textElement.setElementAttribute('contentEditable','true');
 		textElement.setText('Your Text Here');
-
-		//textElement.setElementAttribute('text','Your Text Here');
 		textElement.setElementStyle('top','0%');
 		textElement.setElementStyle('position','absolute');
 		textElement.setElementStyle('width','50%');
@@ -513,13 +435,6 @@ var slideStarted = false;
 				{
 					element.style[allSlides[x].elements[i].styles[j].property]=allSlides[x].elements[i].styles[j].propertyValue;
 				}
-				// if(allSlides[x].elements[i].transitionIn=='None'){
-				// 	mainSlide.appendChild(element);
-				// }
-				// else
-				// {
-				// 	mainSlide
-				// }
 				mainSlide.appendChild(element);
 			}
 			slideContainer.appendChild(mainSlide);

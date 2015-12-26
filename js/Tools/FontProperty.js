@@ -3,12 +3,12 @@ function FontSize(parentElements,container){
 	var container = container;
 	this.init = function(){
 		var changeFont = document.createElement('input');
-		var label = document.createTextNode('Font-size');
+		var label = document.createTextNode('Font-size : ');
 		parentElements.appendChild(label);
 		changeFont.setAttribute('type','number');
 		changeFont.setAttribute('class','tools fontsize');
 		parentElement.appendChild(changeFont);
-		changeFont.onchange = function(){
+		changeFont.onclick = function(){
 			var size = this.value/16*100;
 				var changefont = new CustomEvent('changeFont',{'detail':size});
 				container.dispatchEvent(changefont);
@@ -23,7 +23,7 @@ function FontFamily(parentElements,container){
 	var container = container;
 	this.init = function(){
 		var changeFontFamily = document.createElement('select');
-		var label = document.createTextNode('Font Style');
+		var label = document.createTextNode('Font Style : ');
 		parentElements.appendChild(label);
 		
 		for(var i=0;i<fontFamily.length;i++){
@@ -37,7 +37,9 @@ function FontFamily(parentElements,container){
 		//changeFontFamily.appendChild((document.createElement('option').appendChild(document.createTextNode('Arial'))));
 		changeFontFamily.setAttribute('class','tools');
 		parentElement.appendChild(changeFontFamily);
-		changeFontFamily.onchange = function(){
+		parentElement.appendChild(document.createElement('div'));
+
+		changeFontFamily.onclick = function(){
 			var font = this.value;
 				var changefontstyle = new CustomEvent('changefontstyle',{'detail':font});
 				container.dispatchEvent(changefontstyle);
@@ -109,6 +111,7 @@ function TextAlign(parentElements,container){
 	var parentElement = parentElements;
 	var container = container;
 	this.init = function(){
+		parentElements.appendChild(document.createTextNode('Text-Alignment : '));
 		var leftAligndiv = document.createElement('div');
 		leftAligndiv.setAttribute('class',"btn-sm left-align");
 
@@ -142,6 +145,8 @@ function TextAlign(parentElements,container){
 		justifiedAligndiv.setAttribute('class',"btn-sm justified-align");
 		justifiedAligndiv.style['display']='inline-block';
 		parentElement.appendChild(justifiedAligndiv);
+		parentElement.appendChild(document.createElement('div'));
+
 		justifiedAligndiv.onclick = function(){
 				var justifiedAlign = new CustomEvent('textAlign',{'detail':'justified'});
 				container.dispatchEvent(justifiedAlign);
@@ -157,12 +162,13 @@ function FontColor(parentElements,container){
 		var fontColor = document.createElement('input');
 		fontColor.setAttribute('class','btn-sm');
 		fontColor.setAttribute('type','color');
-
-		var text = document.createTextNode('A');
-		fontColor.appendChild(text);
 		fontColor.style['display']='inline-block';
+		parentElements.appendChild(document.createTextNode('Font-Color : '));
+
 		parentElement.appendChild(fontColor);
-		fontColor.onchange = function(){
+		parentElement.appendChild(document.createElement('div'));
+
+		fontColor.onclick = function(){
 				var fontcolor = new CustomEvent('fontColor',{'detail':fontColor.value});
 				console.log('font-color change fron object');
 				container.dispatchEvent(fontcolor);
