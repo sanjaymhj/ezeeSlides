@@ -79,6 +79,8 @@ this.init();
 		console.log("tool init");
 		//tools.init();
 		console.log("in the main focusSlide.id", focusSlide);
+		console.log(allSlides[focusSlide],"--------------------------------------");
+
 		centerArea.changeWorkspace(allSlides[focusSlide]);
 		workSlide = centerArea.getSlide();
 		workElements = centerArea.getAllElements();
@@ -244,36 +246,18 @@ this.init();
 var slideStarted = false;
 	container.addEventListener('startSlide',function(e){
 		slideStarted = true;
-		var keyPress = document.createElement('div');
-		keyPress.appendChild(document.createTextNode('Key'));
-
-
-		keyPress.style['width'] = "50px";
-		keyPress.style['height'] = "50px";
-		keyPress.style['background'] = "#aeaeae";
-		keyPress.style['position'] = "absolute";
-		keyPress.style['z-index'] = "5";
-		keyPress.style['left'] = "100px";
-
 		var next = document.createElement('div');
-		next.appendChild(document.createTextNode('Next'));
-		next.style['width'] = "50px";
-		next.style['height'] = "50px";
-		next.style['background'] = "#aeaeae";
-		next.style['position'] = "absolute";
-		next.style['z-index'] = "5";
-		next.style['left'] = "50px";
+		next.setAttribute('class',"next-bar");
 
 		var previous = document.createElement('div');
-		previous.appendChild(document.createTextNode('Previous'));
+		previous.setAttribute('class',"previous-bar");
+		
 
-		previous.style['width'] = "50px";
-		previous.style['height'] = "50px";
-		previous.style['background'] = "#aeaeae";
-		previous.style['position'] = "absolute";
-		previous.style['z-index'] = "5";
-		previous.style['left'] = "0";
-		var elementCounter = 0;
+		var up = document.createElement('div');
+		up.setAttribute('class',"up-bar");
+
+		var down = document.createElement('div');
+		down.setAttribute('class',"down-bar");		var elementCounter = 0;
 
 		window.onkeydown = function(e){
 			if(slideStarted)
@@ -335,7 +319,8 @@ var slideStarted = false;
 		centerArea.clearWorkspace();
 		centerArea.setupSlides(previous);
 		centerArea.setupSlides(next);
-		centerArea.setupSlides(keyPress);
+		centerArea.setupSlides(up);
+		centerArea.setupSlides(down);
 
 		startSlide();
 	});
@@ -469,6 +454,7 @@ var slideStarted = false;
 
 		 	console.log("in the changeslideproperty - new property added", propertyValue,property);
 		}
+		leftBar.updateContainer(allSlides);
 	}
 
 	function toggleslideProperty (propertyValue,property){
@@ -493,6 +479,7 @@ var slideStarted = false;
 
 		 	console.log("in the toggleslideProperty - new property added", propertyValue,property);
 		}
+		leftBar.updateContainer(allSlides);
 	}
 
 

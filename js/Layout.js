@@ -16,7 +16,7 @@ function LeftBar(container,slides){
 
 	var self = this;
 	this.updateContainer = function(allSlides){
-
+		self.slideCounter = allSlides.length;
 		while (self.slidesContainer.hasChildNodes()) {
 		    self.slidesContainer.removeChild(self.slidesContainer.lastChild);
 		}
@@ -244,9 +244,7 @@ function CenterArea(container){
 	};
 	this.setupSlides = function(mainSlide){
 		slideArea.appendChild(mainSlide);
-		slideArea.onkeypress = function(){
-				console.log("dfhklajsh liuah eaiwu hailsdf");
-			}
+		
 	}
 	this.getSlide = function(){
 		return self.slide;

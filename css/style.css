@@ -295,6 +295,59 @@
 }
 
 
+.next-bar{
+	width:25px;
+	height:25px;
+	background:url(../images/next-inactive.png) 50% 50% no-repeat;
+	position: absolute;
+	z-index:5;
+	right:25px;
+	bottom:50px;
+}
+
+.down-bar{
+	width:25px;
+	height:25px;
+	background:url(../images/down-inactive.png) 50% 50% no-repeat;
+	position: absolute;
+	z-index:5;
+	right:50px;
+	bottom:25px;
+}
+.up-bar{
+	width:25px;
+	height:25px;
+	background:url(../images/up-inactive.png) 50% 50% no-repeat;
+	position: absolute;
+	z-index:5;
+	right:50px;
+	bottom:75px;
+}
+.previous-bar{
+	width:25px;
+	height:25px;
+	background:url(../images/previous-inactive.png) 50% 50% no-repeat;
+	position: absolute;
+	z-index:5;
+	right:75px;
+	bottom:50px;
+}
+.next-bar.active{
+	background:url(../images/next.png) 50% 50% no-repeat;
+}
+.previous-bar.active{
+	background:url(../images/previous.png) 50% 50% no-repeat;
+}
+.up-bar.active{
+	background:url(../images/up.png) 50% 50% no-repeat;
+}
+.down-bar.active{
+	background:url(../images/down.png) 50% 50% no-repeat;
+}
+
+
+	
+
 
 
 /* Controls */

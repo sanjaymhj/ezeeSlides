@@ -1,0 +1,9 @@
+.main-container{width:100%;}
+.main{width:727px;margin:0 auto;text-align: center;padding-top:100px;}
+.main .head{font-size: 35px;}
+.intro{line-height: 37px;padding:30px 50px;text-align: center; font-size:23px;}
+
+.short-words{margin:0 auto; padding:30px; line-height: 31px;text-align: center; font-size:19px; padding-bottom:5px;}
+.jumping{line-height: 31px;text-align: center; font-size:17px;padding:5px 20px;}
+.create{padding:23px;}
+.create a{text-decoration:none; font-size:31px;color:#000;}

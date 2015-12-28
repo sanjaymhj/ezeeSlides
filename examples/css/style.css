@@ -1,0 +1,161 @@
+*
+{
+	padding : 0;
+	margin : 0;
+}
+.box-container{
+	width:100%;
+	margin:0 auto;
+}
+
+.main-wrapper
+{
+	background:#f5f5f5;
+}
+.hide{
+  display:none;
+}
+
+
+
+.slides-area
+{
+		width:100%;
+		
+		background:#abc;
+		float:left;
+		position:relative;
+		overflow:hidden;
+}
+
+.slides-area .slide
+{
+	position : relative;
+	float : left;
+  background-color:white;
+	
+	/*background : #e1bee8;*/
+	margin:0px 0px 15px 0px;
+
+}
+
+.slide-control
+{
+	position : absolute;
+	width : 50px;
+	height:50px;
+	bottom : 10px;
+	right : 10px;
+	background: black;
+	z-index : 2;
+}
+
+.slides-area .viewport-container
+{
+	/*position:absolute;*/
+	left:0px;
+	overflow:hidden;
+
+
+}
+.slides-area .longslider-container
+{
+	height : 555px;
+	/*width:10000px;*/
+	background:red;
+}
+
+.next-bar{
+	width:25px;
+	height:25px;
+	background:url(../../images/next-inactive.png) 50% 50% no-repeat;
+	position: absolute;
+	z-index:5;
+	right:25px;
+	bottom:50px;
+}
+
+.down-bar{
+	width:25px;
+	height:25px;
+	background:url(../../images/down-inactive.png) 50% 50% no-repeat;
+	position: absolute;
+	z-index:5;
+	right:50px;
+	bottom:25px;
+}
+.up-bar{
+	width:25px;
+	height:25px;
+	background:url(../../images/up-inactive.png) 50% 50% no-repeat;
+	position: absolute;
+	z-index:5;
+	right:50px;
+	bottom:75px;
+}
+.previous-bar{
+	width:25px;
+	height:25px;
+	background:url(../../images/previous-inactive.png) 50% 50% no-repeat;
+	position: absolute;
+	z-index:5;
+	right:75px;
+	bottom:50px;
+}
+.next-bar.active{
+	background:url(../../images/next.png) 50% 50% no-repeat;
+}
+.previous-bar.active{
+	background:url(../../images/previous.png) 50% 50% no-repeat;
+}
+.up-bar.active{
+	background:url(../../images/up.png) 50% 50% no-repeat;
+}
+.down-bar.active{
+	background:url(../../images/down.png) 50% 50% no-repeat;
+}
+
+
+	
+
+
+
+/* Controls */
+
+.controls{
+	width : 25px;
+	height : 25px;
+	display:inline-block;
+}
+
+.backgroundColor{
+	background-color : #069688;
+}
+
+
+.slide{
+	float:left;
+}
+
+
+
+
+
+
+.clearfix:before,
+.clearfix:after {
+    content: " "; /* 1 */
+    display: table; /* 2 */
+}
+
+.clearfix:after {
+    clear: both;
+}
+
+/**
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+.clearfix {
+    *zoom: 1;
+}
