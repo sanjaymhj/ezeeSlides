@@ -16,8 +16,6 @@
   display:none;
 }
 
-
-
 .slides-area
 {
 		width:100%;
@@ -135,6 +133,9 @@
 
 .slide{
 	float:left;
+	width:100%;
+	height:100%;
+
 }
 
 

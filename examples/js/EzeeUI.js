@@ -1,63 +1,55 @@
-function EzeeUI()
-{
+function EzeeUI(allSlide,parentArea){
 	var container = document.createElement('div');
-	var allSlides = [{"id":0,"elements":[{"id":0,"type":"span","attributes":[{"attribute":"contentEditable","attributeValue":"true"}],"styles":[{"property":"top","propertyValue":"23%"},{"property":"position","propertyValue":"absolute"},{"property":"width","propertyValue":"100%"},{"property":"font-size","propertyValue":"187.5%"},{"property":"display","propertyValue":"inline-block"},{"property":"height","propertyValue":"15%"},{"property":"left","propertyValue":"0%"},{"property":"text-align","propertyValue":"center"}],"transitionIn":"fadeIn","transitionOut":"rollOut","text":"Slide&nbsp;1"},{"id":1,"type":"span","attributes":[{"attribute":"contentEditable","attributeValue":"true"}],"styles":[{"property":"top","propertyValue":"32%"},{"property":"position","propertyValue":"absolute"},{"property":"width","propertyValue":"100%"},{"property":"font-size","propertyValue":"187.5%"},{"property":"display","propertyValue":"inline-block"},{"property":"text-align","propertyValue":"center"},{"property":"height","propertyValue":"15%"}],"transitionIn":"fadeIn","transitionOut":"None","text":"Your Text Here"}],"attributes":[],"styles":[],"transitionIn":"bounceIn","transitionOut":"bounceOut"},{"id":1,"elements":[{"id":0,"type":"span","attributes":[{"attribute":"contentEditable","attributeValue":"true"}],"styles":[{"property":"top","propertyValue":"23%"},{"property":"position","propertyValue":"absolute"},{"property":"width","propertyValue":"100%"},{"property":"font-size","propertyValue":"187.5%"},{"property":"display","propertyValue":"inline-block"},{"property":"height","propertyValue":"15%"},{"property":"text-align","propertyValue":"center"},{"property":"font-family","propertyValue":"Arial"}],"transitionIn":"zoomInLeft","transitionOut":"zoomOutLeft","text":"Slide&nbsp;2"},{"id":1,"type":"span","attributes":[{"attribute":"contentEditable","attributeValue":"true"}],"styles":[{"property":"top","propertyValue":"0%"},{"property":"position","propertyValue":"absolute"},{"property":"width","propertyValue":"50%"},{"property":"font-size","propertyValue":"100%"},{"property":"display","propertyValue":"inline-block"}],"transitionIn":"rotateInUpRight","transitionOut":"fadeOutLeft","text":"Your Text Here"}],"attributes":[],"styles":[],"transitionIn":"bounceInRight","transitionOut":"bounceOutLeft"},{"id":2,"elements":[{"id":0,"type":"span","attributes":[{"attribute":"contentEditable","attributeValue":"true"}],"styles":[{"property":"top","propertyValue":"23%"},{"property":"position","propertyValue":"absolute"},{"property":"width","propertyValue":"100%"},{"property":"font-size","propertyValue":"187.5%"},{"property":"display","propertyValue":"inline-block"},{"property":"height","propertyValue":"15%"},{"property":"text-align","propertyValue":"center"}],"transitionIn":"zoomInDown","transitionOut":"zoomOutDown","text":"Slide&nbsp;3"}],"attributes":[],"styles":[],"transitionIn":"bounceInUp","transitionOut":"bounceOutUp"},{"id":3,"elements":[{"id":0,"type":"span","attributes":[{"attribute":"contentEditable","attributeValue":"true"}],"styles":[{"property":"top","propertyValue":"23%"},{"property":"position","propertyValue":"absolute"},{"property":"width","propertyValue":"100%"},{"property":"font-size","propertyValue":"187.5%"},{"property":"display","propertyValue":"inline-block"},{"property":"height","propertyValue":"15%"},{"property":"text-align","propertyValue":"center"}],"transitionIn":"slideInUp","transitionOut":"slideOutUp","text":"Slide&nbsp;4"}],"attributes":[],"styles":[],"transitionIn":"fadeIn","transitionOut":"fadeOut"},{"id":4,"elements":[{"id":0,"type":"span","attributes":[{"attribute":"contentEditable","attributeValue":"true"}],"styles":[{"property":"top","propertyValue":"23%"},{"property":"position","propertyValue":"absolute"},{"property":"width","propertyValue":"100%"},{"property":"font-size","propertyValue":"187.5%"},{"property":"display","propertyValue":"inline-block"},{"property":"height","propertyValue":"15%"},{"property":"text-align","propertyValue":"center"}],"transitionIn":"flipInX","transitionOut":"flipOutX","text":"Slide&nbsp;5"}],"attributes":[],"styles":[],"transitionIn":"fadeInDown","transitionOut":"fadeOutDown"}];
-	
-	container.setAttribute('class',"main-wrapper");
+	var allSlides = allSlide;
+	//container.setAttribute('class',"slide-wrapper");
 	this.self = this;
 	var slide;
+	
 	var next = document.createElement('div');
 	next.setAttribute('class',"next-bar");
 
 	var previous = document.createElement('div');
 	previous.setAttribute('class',"previous-bar");
 	
-
 	var up = document.createElement('div');
 	up.setAttribute('class',"up-bar");
 
 	var down = document.createElement('div');
 	down.setAttribute('class',"down-bar");
 	
-	
-	var centerArea = new CenterArea(container);
 	var propertyExists;
 	var slideContainer = document.createElement('div');
 	var allElement =[];	
 
 	this.getAllSlides = function(){return allSlides;}
+
 	this.init = function() {
 		createLayout();
-		document.body.appendChild(container);
+		
 	}
 
 	function createLayout(){
-		centerArea.init();
 		slideEvent();
 	}
 
 	this.init();
 
-	var slideStarted = false;
 	function slideEvent(){
-		slideStarted = true;
-		
 		var slideCounter = 0;
 		var elementCounter = 0;
 		sliderMarginLeft = parseInt(slideContainer.style.marginLeft);
 		sliderWidth = 0;
-		windowWidth = window.innerWidth;
-		windowHeight = window.innerHeight;
+		windowWidth = parentArea.offsetWidth-parentArea.offsetPadding;
+		windowHeight = parentArea.offsetHeight-parentArea.offsetPadding;
 
-		container.appendChild(next);
-		container.appendChild(previous);
-		container.appendChild(up);
-		container.appendChild(down);
+		parentArea.appendChild(next);
+		parentArea.appendChild(previous);
+		parentArea.appendChild(up);
+		parentArea.appendChild(down);
 
 
 		function elementPrevious(){
 			updateNavInfo();
-
 			if(elementCounter >0){
 				elementCounter--;
 				if(allSlides[slideCounter].elements[elementCounter].transitionIn != 'None')
@@ -76,7 +68,7 @@ function EzeeUI()
 			}
 			else
 			{
-			updateNavInfo();
+				updateNavInfo();
 
 				if(allSlides[slideCounter].elements[elementCounter].transitionIn != 'None'){
 					allElement[elementCounter].style['display']='inline-block';
@@ -92,19 +84,16 @@ function EzeeUI()
 
 		function previousSlide(){
 			if(slideCounter <= 0)
-					{
-						console.log('cant go right');
-					}
-					else
-					{
-						elementCounter =0;
-						slideCounter--;
-						slideinit();
-						//document.getElementsByClassName('slide')[0].setAttribute('class','slide '+allSlides[slideCounter].transition);
-
-
-					}
-					console.log(slideCounter);
+			{
+				console.log('cant go right');
+			}
+			else
+			{
+				elementCounter =0;
+				slideCounter--;
+				slideinit();
+			}
+			console.log(slideCounter);
 		};
 
 		function nextSlide(){
@@ -176,8 +165,10 @@ function EzeeUI()
 		};
 
 		this.slideinit = function(){
-			centerArea.clearWorkspace();
 			updateNavInfo();
+			while (container.hasChildNodes()) {
+		  	  container.removeChild(container.lastChild);
+			}
 			allElement=[];
 			var mainSlide = document.createElement('div');
 			mainSlide.setAttribute('class','slide');
@@ -185,7 +176,6 @@ function EzeeUI()
 			mainSlide.style['height'] = windowHeight+'px';
 			mainSlide.style['position'] = 'absolute';
 			mainSlide.style['z-index'] = slideCounter;
-
 
 			console.log(mainSlide.style['width'],mainSlide.style['height'],"from init");
 		
@@ -222,7 +212,8 @@ function EzeeUI()
 				console.log(allSlides[slideCounter].transitionIn,allSlides[slideCounter].elements[i].transitionIn);
 			}
 			mainSlide.appendChild(document.createTextNode(slideCounter));
-			centerArea.setupSlides(mainSlide);
+			container.appendChild(mainSlide);
+			parentArea.appendChild(container);
 			slide = mainSlide;
 			console.log(allElement);	
 
@@ -282,37 +273,4 @@ function EzeeUI()
 
 		this.slideinit();
 	};
-
-
-
 }
-var ezeeUI = new EzeeUI();
-
-
-
-
-//center area class
-
-
-function CenterArea(container){
-	var slideArea = document.createElement('div');
-	var self = this;
-	this.init = function(){
-		slideArea.setAttribute('class','slides-area');
-		slideArea.style['height'] = window.innerHeight +'px';
-		slideArea.style['width'] = window.innerWidth +'px';
-		container.appendChild(slideArea);
-	}
-
-	this.clearWorkspace = function(){
-		while (slideArea.hasChildNodes()) {
-		    slideArea.removeChild(slideArea.lastChild);
-		}
-	};
-
-	this.setupSlides = function(mainSlide){
-		slideArea.appendChild(mainSlide);
-	}
-
-}	
-	

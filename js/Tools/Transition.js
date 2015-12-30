@@ -15,19 +15,16 @@ function Transition(parentElements,container){
 			var text = document.createTextNode(introTransition[i]);
 			var opt = document.createElement('option');
 			opt.appendChild(text);
-			//opt.style['font-family']=transition[i];
 			introSelect.appendChild(opt);		
 		}
 
 
 		var outroSelect = document.createElement('select');
 		var outroLabel = document.createTextNode(' Outro : ');
-		//parentElements.appendChild(document.createElement('div'));
 		for(var i=0;i<outroTransition.length;i++){
 			var text = document.createTextNode(outroTransition[i]);
 			var opt = document.createElement('option');
 			opt.appendChild(text);
-			//opt.style['font-family']=transition[i];
 			outroSelect.appendChild(opt);		
 		}
 
@@ -40,17 +37,16 @@ function Transition(parentElements,container){
 		outroSelect.setAttribute('class','tools');
 		parentElement.appendChild(outroSelect);
 		introSelect.onclick = function(){
-			
 			var animation = this.value;
-				var transitionEvent = new CustomEvent('transitionIn',{'detail':animation});
-				container.dispatchEvent(transitionEvent);
-			};
+			var transitionEvent = new CustomEvent('transitionIn',{'detail':animation});
+			container.dispatchEvent(transitionEvent);
+		};
 
 		outroSelect.onclick = function(){
 			var animation = this.value;
-				var transitionEvent = new CustomEvent('transitionOut',{'detail':animation});
-				container.dispatchEvent(transitionEvent);
-			};
+			var transitionEvent = new CustomEvent('transitionOut',{'detail':animation});
+			container.dispatchEvent(transitionEvent);
+		};
 	}
 	this.init();
 }

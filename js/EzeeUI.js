@@ -1,490 +1,272 @@
-function EzeeUI()
-{
+function EzeeUI(allSlide,parentArea){
 	var container = document.createElement('div');
-	
-	container.setAttribute('class',"main-wrapper clearfix");
+	var allSlides = allSlide;
 	this.self = this;
-	var allSlides = [];
+	var slide;
 	
-	var focusSlide;
-	var focusElementSlide;
-	var focusElement;
-	var workSlide;
-	var workElements = [];
+	var next = document.createElement('div');
+	next.setAttribute('class',"next-bar");
 
-	var leftBar = new LeftBar(container, allSlides);
-	var tools = new Tools(container);
-	var centerArea = new CenterArea(container);
+	var previous = document.createElement('div');
+	previous.setAttribute('class',"previous-bar");
+	
+	var up = document.createElement('div');
+	up.setAttribute('class',"up-bar");
+
+	var down = document.createElement('div');
+	down.setAttribute('class',"down-bar");
+	
 	var propertyExists;
 	var slideContainer = document.createElement('div');
-		
+	var allElement =[];	
 
-	this.getAllSlides = function(){return allSlides;}//for dev
-	
+	this.getAllSlides = function(){return allSlides;}
+
 	this.init = function() {
 		createLayout();
-		document.body.appendChild(container);	
 	}
-this.init();
-	function createLayout(){
-		leftBar.init();
-		centerArea.init();
-		tools.init();
-	}
-
-	container.addEventListener('addSlide',function(e){
-		var slide = new Slide(allSlides.length);
-		allSlides.push(slide);
-		//centerArea.slideAdded();
-		console.log(allSlides);
-	});
-
-	container.addEventListener('deleteElement',function(e){
-		console.log('delete this ', allSlides[focusSlide].elements[focusElement]);
-		allSlides[focusSlide].elements.splice(focusElement,1);
-		focusElement--;
-		if(focusElement<0)
-		{
-			centerArea.changeWorkspace(allSlides[focusSlide]);
-		}
-		else{
-			focusElement = 0;
-		}
-
-	});
-
-	container.addEventListener('deleteSlide',function(e){
-		console.log('delete this ', allSlides[focusSlide]);
-		allSlides.splice(focusSlide,1);
-		console.log(allSlides,"remaining slides after deleting");
-		if(allSlides.length>0)
-			leftBar.updateContainer(allSlides);
-		focusSlide--;
-		
-		if(focusSlide > 0 )
-		{
-			centerArea.changeWorkspace(allSlides[focusSlide]);
-		}
-		else{
-			focusSlide = 0;
-			centerArea.clearWorkspace();
-		}
-		
-	});
-	this.getWorkElements = function(){return workElements};
-
-	container.addEventListener('slideToWorkSpace',function(e){
-		focusSlide = e.detail;
-		slideStarted = false;
-		console.log("tool init");
-		//tools.init();
-		console.log("in the main focusSlide.id", focusSlide);
-		console.log(allSlides[focusSlide],"--------------------------------------");
-
-		centerArea.changeWorkspace(allSlides[focusSlide]);
-		workSlide = centerArea.getSlide();
-		workElements = centerArea.getAllElements();
-		console.log(workElements,"allElements From");
-		
-		
-	});
-
-	container.addEventListener('activeElementEvent',function(e){	
-		console.log(focusElement,"first one");
-		if(focusElement)
-		{
-			console.log("focusElement exists");
-			console.log('old focusSlide ',focusElementSlide,'old element',focusElement.elementId);
-		}
-		else{
-			console.log("focusElement doesnot exists");
-			console.log('focusElement now',focusElement);
-		}
-		
-		focusElementSlide = focusSlide;
-		focusElement = e.detail.elementId;
-		
-
 	
-	});
+	this.init();
 
-	container.addEventListener('changefontstyle',function(e){
-		changedProperty(e.detail,'font-family');
-		console.log(e.detail, 'is font style after change');
-	});
+	function createLayout(){
+		slideEvent();
+	}
 
-	container.addEventListener('exportSlide',function(e){
-		//document.getElementById('jsonHolder').innerHTML = JSON.stringify(allSlides);
-		var copied =JSON.stringify(allSlides);// document.getElementById('jsonHolder').createTextRange();
-		//e.clipboardData.setData('text/plain', 'Hello, world!');
-		//copied.execCommand("Copy");
-		alert(copied);
-		 // var clip = new ClipboardEvent('copy');
-   //              //clip.clipboardData.setData('text/plain', "test");
-   //              clip.preventDefault();
-   //              clip.returnValue = false;
-   //              document.dispatchEvent(clip);
+	function slideEvent(){
+		var slideCounter = 0;
+		var elementCounter = 0;
+		sliderMarginLeft = parseInt(slideContainer.style.marginLeft);
+		sliderWidth = 0;
+		windowWidth = parentArea.offsetWidth-parentArea.offsetPadding;
+		windowHeight = parentArea.offsetHeight-parentArea.offsetPadding;
 
-	});
-	document.addEventListener('copy',function(e){   // e.clipboardData.setData('application/json', JSON.stringify(allSlides));
-		alert('copied'+JSON.stringify(allSlides));
-		e.clipboardData.setData('text/plain', JSON.stringify(allSlides));
-		e.preventDefault();
-});
-
-	container.addEventListener('transitionIn',function(e){
-		console.log(e.detail, 'is transition change');
-		allSlides[focusSlide].setTransitionIn(e.detail);
-		workSlide.setAttribute('class','slide animated '+e.detail);
-		workSlide.addEventListener("animationend", function(){
-			workSlide.setAttribute('class','slide');// animated '+document.getElementsByClassName('slide')[0].transitionIn);
-		}, false);
-	});
-
-	container.addEventListener('transitionOut',function(e){
-		
-		console.log(e.detail, 'is transition change');
-		allSlides[focusSlide].setTransitionOut(e.detail);
-		console.log(allSlides[focusSlide].transitionOut);
-		workSlide.setAttribute('class','slide animated '+e.detail);
-		workSlide.addEventListener("animationend", function(){
-			workSlide.setAttribute('class','slide');// animated '+document.getElementsByClassName('slide')[0].transitionIn);
-		}, false);
-	});
-
-	container.addEventListener('elementTransitionIn',function(e){
-				workElements = centerArea.getAllElements();
-
-		console.log(e.detail, 'is element transition change in');
-
-		allSlides[focusSlide].elements[focusElement].setTransitionIn(e.detail);
-		//console.log('transition set to ',e.detail);
-		console.log('transition set to ',allSlides[focusSlide].elements[focusElement].transitionIn);
-		console.log(workElements,' getting all elements from element transition');
-		
-		console.log(workElements,'elements to be animated');
-		workElements[focusElement].setAttribute('class','animated '+e.detail);
-		//workElements[focusElement].addEventListener('animationend',function(){workElements[focusElement].setAttribute('class','');});
-	});
-
-	container.addEventListener('elementTransitionOut',function(e){
-				workElements = centerArea.getAllElements();
-
-		console.log(e.detail, 'is element transition change out');
-		allSlides[focusSlide].elements[focusElement].setTransitionOut(e.detail);
-		
-		//console.log('transition set to ',e.detail);
-		console.log('transition set to ',allSlides[focusSlide].elements[focusElement].transitionOut);
-		workElements[focusElement].setAttribute('class','animated '+e.detail);
-		workElements[focusElement].addEventListener('animationend',function(){workElements[focusElement].setAttribute('class','');});
-	});
-
-	container.addEventListener('textChange',function(e){
-		allSlides[focusSlide].elements[focusElement].setText(e.detail);
-		console.log(allSlides[focusSlide].elements[focusElement].text, 'is text after change');
-	});
-	container.addEventListener('changeWidth',function(e){
-		changedProperty(e.detail+'%','width');
-	});
-	container.addEventListener('changeHeight',function(e){
-		changedProperty(e.detail+'%','height');
-	});
-
-	container.addEventListener('changeBackground',function(e){
-		changedProperty(e.detail,'background-color');
-	});
-
-	container.addEventListener('clearBackground',function(e){
-		toggleProperty(e.detail,'background-color');
-	});
-
-	container.addEventListener('changePositionX',function(e){
-		changedProperty(e.detail+'%','left');
-	});
-
-	container.addEventListener('changePositionY',function(e){
-		changedProperty(e.detail+'%','top');
-	});
-
-	container.addEventListener('changeFont',function(e){
-		changedProperty(e.detail+'%','font-size');
-	});
-
-	container.addEventListener('bold',function(e){
-		toggleProperty('bold','font-weight');
-	});
-
-	container.addEventListener('italics',function(e){
-		toggleProperty('italic','font-style');
-	});
-
-	container.addEventListener('underline',function(e){
-		toggleProperty('underline','text-decoration');
-	});
-
-	container.addEventListener('textAlign',function(e){
-		changedProperty(e.detail,'text-align');
-	});
-
-	container.addEventListener('fontColor',function(e){
-		changedProperty(e.detail,'color');
-	});
-
-	container.addEventListener('slidechangeBackground',function(e){
-		changedslideProperty(e.detail,'background-color');
-		//console.log("set background of slide",e.detail);
-
-	});
-
-	container.addEventListener('slideclearBackground',function(e){
-		toggleslideProperty(e.detail,'background-color');
-		console.log("clear background of slide");
-	});
+		parentArea.appendChild(next);
+		parentArea.appendChild(previous);
+		parentArea.appendChild(up);
+		parentArea.appendChild(down);
 
 
-
-var slideStarted = false;
-	container.addEventListener('startSlide',function(e){
-		slideStarted = true;
-		var next = document.createElement('div');
-		next.setAttribute('class',"next-bar");
-
-		var previous = document.createElement('div');
-		previous.setAttribute('class',"previous-bar");
-		
-
-		var up = document.createElement('div');
-		up.setAttribute('class',"up-bar");
-
-		var down = document.createElement('div');
-		down.setAttribute('class',"down-bar");		var elementCounter = 0;
-
-		window.onkeydown = function(e){
-			if(slideStarted)
-			{
-				var e = e || window.event;
-
-			    if (e.keyCode == '38') {
-			        // up arrow
-			        console.log("up arrow");
-			    }
-			    else if (e.keyCode == '40') {
-			        // down arrow
-			        console.log("down arrow");
-			    }
-			    else if (e.keyCode == '37') {
-			       if(slideContainer.offsetLeft != 0){
-						slideContainer.style['left'] = slideContainer.offsetLeft + 740 +'px';
-						console.log(slideContainer.offsetLeft);
-					}
-					else{
-						console.log('cant go previous');
-					}
-			       console.log("left arrow");
-			    }
-			    else if (e.keyCode == '39') {
-			       if(slideContainer.offsetLeft != -slideContainer.offsetWidth+740 ){
-						slideContainer.style['left'] = slideContainer.offsetLeft - 740 +'px';
-						console.log(slideContainer.offsetLeft);
-						elementCounter = 0;
-						}
-						else{
-							console.log('cant go next');
-						}
-			       console.log("right arrow");
-			    }
+		function elementPrevious(){
+			updateNavInfo();
+			if(elementCounter >0){
+				elementCounter--;
+				if(allSlides[slideCounter].elements[elementCounter].transitionIn != 'None')
+					allElement[elementCounter].style['display']='none';
+				console.log("back to this element ",elementCounter);
 			}
+			else{
+				console.log("reached to this element ",elementCounter);
+			}
+		};
+
+		function elementNext(){
+			if(elementCounter > allSlides[slideCounter].elements.length-1)
+			{
+				console.log('cant go down');
+			}
+			else
+			{
+				updateNavInfo();
+				if(allSlides[slideCounter].elements[elementCounter].transitionIn != 'None'){
+					allElement[elementCounter].style['display']='inline-block';
+					allElement[elementCounter].setAttribute('class','animated '+allSlides[slideCounter].elements[elementCounter].transitionIn);
+					allElement[elementCounter].addEventListener('animationend',function(){
+						allElement[elementCounter].setAttribute('class','');
+					});
+				 }
+				 elementCounter++;
+			}
+		};
+
+		function previousSlide(){
+			if(slideCounter <= 0)
+			{
+				console.log('cant go right');
+			}
+			else
+			{
+				elementCounter =0;
+				slideCounter--;
+				slideinit();
+			}
+			console.log(slideCounter);
+		};
+
+		function nextSlide(){
+			elementCounter = 0;
+			console.log('new slide start****************************');
+			console.log(allSlides.length - 1,"right limit & current is",slideCounter);
+			if(slideCounter >= allSlides.length-1)
+			{
+				console.log('cant go right');
+
+			}
+			else
+			{
+				console.log('within limit---------');
+				if(allSlides[slideCounter].transitionOut != 'None'){
+					console.log('animating outro of slide',slideCounter);
+
+					console.log('animating ',allSlides[slideCounter].transitionOut,' of ',slideCounter);
+
+					slide.setAttribute('class','slide animated '+allSlides[slideCounter].transitionOut)
+					slide.addEventListener("animationend", function(){
+						slide.setAttribute('class','slide');//+allSlides[slideCounter].transition);
+						//alert("anim end");
+						slideCounter++;
+						slideinit();
+						slide.setAttribute('class','slide animated '+allSlides[slideCounter].transitionIn);
+						elementNext();
+						slide.addEventListener("animationend", function(){
+							slide.setAttribute('class','slide');//+allSlides[slideCounter].transition);
+
+					}, false);
+					}, false);
+				}
+				else{
+					slideCounter++;
+					slideinit();
+					slide.setAttribute('class','slide animated '+allSlides[slideCounter].transitionIn);
+					elementNext();
+					slide.addEventListener("animationend", function(){
+						slide.setAttribute('class','slide');//+allSlides[slideCounter].transition);
+					}, false);
+				}
+				console.log(slideCounter);
+			}
+		};
+		
+		window.onkeydown = function(e){
+			var e = e || window.event;
+			if (e.keyCode == '38') {
+				// up arrow
+				console.log("up arrow");
+				elementPrevious();
+			}
+			else if (e.keyCode == '40') {
+				// down arrow
+				elementNext();
+				console.log("down arrow");
+			}
+			else if (e.keyCode == '37')//left or previous
+			{
+				previousSlide();
+				console.log("left arrow");
+			}
+			else if (e.keyCode == '39')//right or next
+			{
+				nextSlide();
+				console.log("right arrow");
+		 	}	
+		};
+
+		this.slideinit = function(){
+			updateNavInfo();
+			while (container.hasChildNodes()) {
+		  	  container.removeChild(container.lastChild);
+			}
+			allElement=[];
+			var mainSlide = document.createElement('div');
+			mainSlide.setAttribute('class','slide');
+			mainSlide.style['width'] = windowWidth+'px';
+			mainSlide.style['height'] = windowHeight+'px';
+			mainSlide.style['position'] = 'absolute';
+			mainSlide.style['z-index'] = slideCounter;
+
+			console.log(mainSlide.style['width'],mainSlide.style['height'],"from init");
+		
+			for(var i=0;i<allSlides[slideCounter].styles.length;i++){
+				mainSlide.style[allSlides[slideCounter].styles[i].property]=allSlides[slideCounter].styles[i].propertyValue;
+			}
+
+			for(var i=0;i<allSlides[slideCounter].elements.length;i++){
+				var element = document.createElement(allSlides[slideCounter].elements[i].type);
+				element.innerHTML = allSlides[slideCounter].elements[i].text;
+				element.setAttribute('id',i);
+				
+				for(var j=0;j<allSlides[slideCounter].elements[i].attributes.length;j++)
+				{
+					element.setAttribute(allSlides[slideCounter].elements[i].attributes[j].attribute,allSlides[slideCounter].elements[i].attributes[j].attributeValue);
+				}
+				for(var j=0;j<allSlides[slideCounter].elements[i].styles.length;j++)
+				{
+					element.style[allSlides[slideCounter].elements[i].styles[j].property]=allSlides[slideCounter].elements[i].styles[j].propertyValue;
+				}
+				console.log('transition In :',allSlides[slideCounter].elements[i].transitionIn,'transition Out: ',allSlides[slideCounter].elements[i].transitionOut);
+				if(allSlides[slideCounter].elements[i].transitionIn == 'None')
+				{
+					console.log('transition in none if element',i);
+				}
+				else{
+					element.style['display']='none';
+				}
+					mainSlide.appendChild(element);	
+					
+					console.log('Slide init ', slide);
+					allElement.push(element);
+
+				console.log(allSlides[slideCounter].transitionIn,allSlides[slideCounter].elements[i].transitionIn);
+			}
+			mainSlide.appendChild(document.createTextNode(slideCounter));
+			container.appendChild(mainSlide);
+			parentArea.appendChild(container);
+			slide = mainSlide;
+			console.log(allElement);	
+
+		};
+		var updateNavInfo = function(){
+			if(slideCounter<=allSlides.length-2){
+				next.setAttribute('class','next-bar active');
+			}
+			else{
+				next.setAttribute('class','next-bar');
+			}
+
+			if(slideCounter>0){
+				previous.setAttribute('class','previous-bar active');
+			}
+			else{
+				previous.setAttribute('class','previous-bar');
+			}
+				console.log('down arrow blah',elementCounter,allSlides[slideCounter].elements.length)
+
+			if(elementCounter == allSlides[slideCounter].elements.length-1 || allSlides[slideCounter].elements.length == 0){
+				down.setAttribute('class','down-bar');
+				console.log('down arrow blah',elementCounter,allSlides[slideCounter].elements.length)
+			}
+			else{
+				down.setAttribute('class','down-bar active');
+				console.log('down arrow blacj',elementCounter,allSlides[slideCounter].elements.length)
+
+			}
+
+			if(elementCounter == 0){
+				up.setAttribute('class','up-bar');
+				console.log('for button status',slideCounter,allSlides.length-1,'active state++++++++++++++++++++');
+			}
+			else{
+				up.setAttribute('class','up-bar active');
+				console.log('for button status',slideCounter,allSlides.length,'inactive state------------------');
+			}
+
+			
 		}
 
 		next.onclick = function(){
-			if(slideContainer.offsetLeft != -slideContainer.offsetWidth+740 ){
-			slideContainer.style['left'] = slideContainer.offsetLeft - 740 +'px';
-			console.log(slideContainer.offsetLeft);
-			}
-			else{
-				console.log('cant go next');
-			}
-			//slideContainer.style['margin'] = slideContainer.style['margin']-740;
+			nextSlide();
 		};
+
 		previous.onclick = function(){
-			if(slideContainer.offsetLeft != 0){
-				slideContainer.style['left'] = slideContainer.offsetLeft + 740 +'px';
-				console.log(slideContainer.offsetLeft);
-			}
-			else{
-				console.log('cant go previous');
-			}
-			//slideContainer.style['margin'] = slideContainer.style['margin']-740;
+			previousSlide();
 		};
-		centerArea.clearWorkspace();
-		centerArea.setupSlides(previous);
-		centerArea.setupSlides(next);
-		centerArea.setupSlides(up);
-		centerArea.setupSlides(down);
+		up.onclick = function(){
+			elementPrevious();
+		};
 
-		startSlide();
-	});
+		down.onclick = function(){
+			elementNext();
+		};
 
-
-
-	//add text in the workspace
-	container.addEventListener('createText',function(e){
-		var textElement = new Element('span',allSlides[focusSlide].elements.length);
-		textElement.setElementAttribute('contentEditable','true');
-		textElement.setText('Your Text Here');
-		textElement.setElementStyle('top','0%');
-		textElement.setElementStyle('position','absolute');
-		textElement.setElementStyle('width','50%');
-		textElement.setElementStyle('font-size','100%');
-		textElement.setElementStyle('display','inline-block');
-
-		allSlides[focusSlide].elements.push(textElement);
-		console.log(allSlides[focusSlide].elements.length);
-		centerArea.changeWorkspace(allSlides[focusSlide]);
-		console.log("create New text place");
-
-
-	});
- 
-	function changedProperty (propertyValue,property){
-		propertyExists=false;
-		for(var i=0;i<allSlides[focusSlide].elements[focusElement].styles.length;i++)
-		{
-			if(allSlides[focusSlide].elements[focusElement].styles[i].property == property){
-				allSlides[focusSlide].elements[focusElement].styles[i].propertyValue = propertyValue;
-				console.log(property," set");
-				centerArea.changeWorkspace(allSlides[focusSlide]);
-				propertyExists = true;
-				break;
-			}
-		}
-		if(!propertyExists)
-		{
-			var newStyle = new Style(property, propertyValue);
-			allSlides[focusSlide].elements[focusElement].styles.push(newStyle);
-			centerArea.changeWorkspace(allSlides[focusSlide]);
-
-		 	console.log("in the main - new property added", propertyValue,property);
-		}
-	}
-
-	function toggleProperty (propertyValue,property){
-		propertyExists=false;
-		for(var i=0;i<allSlides[focusSlide].elements[focusElement].styles.length;i++)
-		{
-			if(allSlides[focusSlide].elements[focusElement].styles[i].property == property){
-				allSlides[focusSlide].elements[focusElement].styles.splice(i,1);
-				console.log(property," unset");
-				centerArea.changeWorkspace(allSlides[focusSlide]);
-				propertyExists = true;
-				break;
-			}
-		}
-		if(!propertyExists)
-		{
-			var newStyle = new Style(property, propertyValue);
-			allSlides[focusSlide].elements[focusElement].styles.push(newStyle);
-				centerArea.changeWorkspace(allSlides[focusSlide]);
-
-		 	console.log("in the main - new property added", propertyValue,property);
-		}
-	}
-
-	function startSlide(){
-		slideContainer.style['width'] = allSlides.length * 740 +'px';
-		slideContainer.style['height'] = '550px';
-		slideContainer.style['position'] = 'absolute';
-		slideContainer.style['left'] = '0px';
-
-		while (slideContainer.hasChildNodes()) {
-		    slideContainer.removeChild(slideContainer.lastChild);
-		}
-		console.log(allSlides.length);
-		for(var x=0;x<allSlides.length;x++){
-			var mainSlide = document.createElement('div');
-			mainSlide.setAttribute('class','slide');
-
-			for(var i=0;i<allSlides[x].styles.length;i++){
-				mainSlide.style[allSlides[x].styles[i].property]=allSlides[x].styles[i].propertyValue;
-			}
-
-			for(var i=0;i<allSlides[x].elements.length;i++){
-				var element = document.createElement(allSlides[x].elements[i].type);
-				element.innerHTML = allSlides[x].elements[i].text;
-				element.setId =i;
-				for(var j=0;j<allSlides[x].elements[i].attributes.length;j++)
-				{
-					element.setAttribute(allSlides[x].elements[i].attributes[j].attribute,allSlides[x].elements[i].attributes[j].attributeValue);
-				}
-				for(var j=0;j<allSlides[x].elements[i].styles.length;j++)
-				{
-					element.style[allSlides[x].elements[i].styles[j].property]=allSlides[x].elements[i].styles[j].propertyValue;
-				}
-				mainSlide.appendChild(element);
-			}
-			slideContainer.appendChild(mainSlide);
-		}
-		centerArea.setupSlides(slideContainer);
-		
-		console.log(mainSlide);
-	}
-
-	
-
-
-	function changedslideProperty (propertyValue,property){
-		propertyExists=false;
-		for(var i=0;i<allSlides[focusSlide].styles.length;i++)
-		{
-			if(allSlides[focusSlide].styles[i].property == property){
-				allSlides[focusSlide].styles[i].propertyValue = propertyValue;
-				console.log(property," set");
-				centerArea.changeWorkspace(allSlides[focusSlide]);
-				propertyExists = true;
-		 		console.log("in the changeslideproperty - property exists", propertyValue,property);
-
-				break;
-			}
-		}
-		if(!propertyExists)
-		{
-			var newStyle = new Style(property, propertyValue);
-			allSlides[focusSlide].styles.push(newStyle);
-			centerArea.changeWorkspace(allSlides[focusSlide]);
-
-		 	console.log("in the changeslideproperty - new property added", propertyValue,property);
-		}
-		leftBar.updateContainer(allSlides);
-	}
-
-	function toggleslideProperty (propertyValue,property){
-		propertyExists=false;
-		for(var i=0;i<allSlides[focusSlide].styles.length;i++)
-		{
-			if(allSlides[focusSlide].styles[i].property == property){
-				allSlides[focusSlide].styles.splice(i,1);
-				console.log(property," unset");
-				centerArea.changeWorkspace(allSlides[focusSlide]);
-				propertyExists = true;
-				console.log("in the toggleslideProperty - new property added", propertyValue,property);
-
-				break;
-			}
-		}
-		if(!propertyExists)
-		{
-			var newStyle = new Style(property, propertyValue);
-			allSlides[focusSlide].styles.push(newStyle);
-				centerArea.changeWorkspace(allSlides[focusSlide]);
-
-		 	console.log("in the toggleslideProperty - new property added", propertyValue,property);
-		}
-		leftBar.updateContainer(allSlides);
-	}
-
-
-
-
-
+		this.slideinit();
+	};
 }
-var ezeeUI = new EzeeUI();

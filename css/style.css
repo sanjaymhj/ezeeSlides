@@ -14,8 +14,6 @@
 }
 .left-bar
 {
-	max-height : 660px;
-	min-height: 660px;
 	width:15%;
 	float:left;
 	/*background: red;*/
@@ -72,7 +70,7 @@
 	font-size:25px;
 }
 
-.left-bar .export-slide
+.left-bar .edit-slide
 {
 	bottom:0px;
 	width:50px;
@@ -230,8 +228,13 @@
 .slides-area
 {
 		width:60%;
-		min-height : 500px;
-		max-height:500px;
+		float:left;
+		padding:1%;
+		position:relative;
+		overflow:hidden;
+}
+.slides-area.show
+{
 		float:left;
 		padding:1%;
 		position:relative;
@@ -240,11 +243,12 @@
 .tool-seperator
 {
 	font-weight:bold;
-	padding-top:25px;
+	padding-top:15px;
 	padding-bottom:10px;
 	font-size:18px;
-
+	border-top:1px solid #000;
 }
+
 .slide
 {
 	position : relative;
@@ -259,10 +263,11 @@
 {
 	position : relative;
 	float : left;
-	width : 740px;
-	height : 510px;
+	width : 819px;
+	height : 460px;
 	/*background : #e1bee8;*/
 	margin:0px 0px 15px 0px;
+	border:1px solid #000;
 
 }
 
@@ -279,21 +284,16 @@
 
 .slides-area .viewport-container
 {
-	/*position:absolute;*/
-	left:0px;
-	width : 740px;
-	max-height : 510px;
+	left : 0px;
+	width : 819px;
+	max-height : 460px;
 	overflow:hidden;
-
-
 }
-.slides-area .longslider-container
+
+.slides-area
 {
-	height : 510px;
-	/*width:10000px;*/
-	background:red;
+	height : 460px;
 }
-
 
 .next-bar{
 	width:25px;

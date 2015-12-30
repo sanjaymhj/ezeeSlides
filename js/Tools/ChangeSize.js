@@ -9,19 +9,18 @@ function ChangeSize(parentElements,container){
 		changeWidth.setAttribute('class','tools change-position ');
 		parentElement.appendChild(changeWidth);
 		changeWidth.onclick = function(){
-				var changewidth =new CustomEvent('changeWidth',{'detail':this.value});
-				container.dispatchEvent(changewidth);
-			};
+			var changewidth =new CustomEvent('changeWidth',{'detail':this.value});
+			container.dispatchEvent(changewidth);
+		};
 		var changeHeight = document.createElement('input');
 		changeHeight.setAttribute('type','number');
 		changeHeight.setAttribute('class','tools change-position ');
 		parentElement.appendChild(changeHeight);
 		parentElement.appendChild(document.createElement('div'));
 		changeHeight.onclick = function(){
-				var changeheight =new CustomEvent('changeHeight',{'detail':this.value});
-				container.dispatchEvent(changeheight);
-			};
+			var changeheight =new CustomEvent('changeHeight',{'detail':this.value});
+			container.dispatchEvent(changeheight);
+		};
 	}
 	this.init();
-
 }

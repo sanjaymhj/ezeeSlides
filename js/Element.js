@@ -24,13 +24,4 @@ function Element(elementType,id){
 	this.setElementStyle = function(property, propertyValue){
 		self.styles.push(new Style(property, propertyValue));
 	}
-
-	this.setTransitionIn = function(transition){
-		self.transitionIn = transition;
-	}
-
-	this.setTransitionOut = function(transition){
-		self.transitionOut = transition;
-	}
-
 }

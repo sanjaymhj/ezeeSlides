@@ -4,6 +4,8 @@ function DeleteElement(topTools,container){
 	deleteElement.appendChild(document.createTextNode('Delete This Element'));
 	this.init = function(){
 		topTools.appendChild(deleteElement);
+		topTools.appendChild(document.createElement('div'));
+		
 		deleteElement.addEventListener('click',function(){
 			var deleteElementEvent = new CustomEvent('deleteElement',{});
 			container.dispatchEvent(deleteElementEvent);
@@ -14,7 +16,7 @@ function DeleteElement(topTools,container){
 
 function DeleteSlide(topTools,container){
 	var deleteSlide = document.createElement('div');
-	deleteSlide.setAttribute('class','tools btn-lg');
+	deleteSlide.setAttribute('class','tools btn-lg next');
 	deleteSlide.appendChild(document.createTextNode('Delete This Slide'));
 	this.init = function(){
 		topTools.appendChild(deleteSlide);

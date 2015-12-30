@@ -9,9 +9,10 @@ function ChangePosition(parentElements,container){
 		changePositionX.setAttribute('class','tools change-position');
 		parentElement.appendChild(changePositionX);
 		changePositionX.onclick = function(){
-				var changePosX = new CustomEvent('changePositionX',{'detail':this.value});
-				container.dispatchEvent(changePosX);
-			};
+			var changePosX = new CustomEvent('changePositionX',{'detail':this.value});
+			container.dispatchEvent(changePosX);
+		};
+
 		var changePositionY = document.createElement('input');
 		changePositionY.setAttribute('type','number');
 		changePositionY.setAttribute('class','tools change-position')
@@ -19,10 +20,9 @@ function ChangePosition(parentElements,container){
 		parentElement.appendChild(document.createElement('div'));
 
 		changePositionY.onclick = function(){
-				var changePosY = new CustomEvent('changePositionY',{'detail':this.value});
-				container.dispatchEvent(changePosY);
-			};
+			var changePosY = new CustomEvent('changePositionY',{'detail':this.value});
+			container.dispatchEvent(changePosY);
+		};
 	}
 	this.init();
-
 }

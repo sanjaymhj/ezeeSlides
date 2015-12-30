@@ -1,4 +1,3 @@
-
 function ElementTransition(parentElements,container){
 	var introTransition = ['None','bounceIn','bounceInDown','bounceInLeft','bounceInRight','bounceInUp','fadeIn','fadeInDown','fadeInDownBig','fadeInLeft','fadeInLeftBig','fadeInRight','fadeInRightBig','fadeInUp','fadeInUpBig','flip','flipInX','flipInY','flipInY','lightSpeedIn','rotateIn','rotateInDownLeft','rotateInDownRight','rotateInDownLeft','rotateInUpRight','slideInUp','slideInDown','slideInLeft','slideInRight','zoomIn','zoomInDown','zoomInLeft','rollIn'];
 	var outroTransition = ['None','bounceOut','bounceOutDown','bounceOutLeft','bounceOutRight','bounceOutUp','fadeOut','fadeOutDown','fadeOutDownBig','fadeOutLeft','fadeOutLeftBig','fadeOutRight','fadeOutRightBig','fadeOutUp','fadeOutUpBig','flip','flipOutX','flipOutY','flipOutY','lightSpeedOut','rotateOut','rotateOutDownLeft','rotateOutDownRight','rotateOutDownLeft','rotateOutUpRight','slideOutUp','slideOutDown','slideOutLeft','slideOutRight','zoomOut','zoomOutDown','zoomOutLeft','rollOut']
@@ -16,7 +15,6 @@ function ElementTransition(parentElements,container){
 			var text = document.createTextNode(introTransition[i]);
 			var opt = document.createElement('option');
 			opt.appendChild(text);
-			//opt.style['font-family']=transition[i];
 			introSelect.appendChild(opt);		
 		}
 
@@ -31,7 +29,6 @@ function ElementTransition(parentElements,container){
 			outroSelect.appendChild(opt);		
 		}
 
-		
 		introSelect.setAttribute('class','tools');
 		parentElement.appendChild(introSelect);
 		parentElements.appendChild(document.createElement('div'));
