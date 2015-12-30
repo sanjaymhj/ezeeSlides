@@ -52,20 +52,13 @@ function EzeeUI(allSlide,parentArea){
 				elementCounter--;
 				if(allSlides[slideCounter].elements[elementCounter].transitionIn != 'None')
 					allElement[elementCounter].style['display']='none';
-				console.log("back to this element ",elementCounter);
 			}
 			else{
-				console.log("reached to this element ",elementCounter);
 			}
 		};
 
 		function elementNext(){
-			if(elementCounter > allSlides[slideCounter].elements.length-1)
-			{
-				console.log('cant go down');
-			}
-			else
-			{
+			if(!(elementCounter > allSlides[slideCounter].elements.length-1)){
 				updateNavInfo();
 				if(allSlides[slideCounter].elements[elementCounter].transitionIn != 'None'){
 					allElement[elementCounter].style['display']='inline-block';
@@ -79,47 +72,26 @@ function EzeeUI(allSlide,parentArea){
 		};
 
 		function previousSlide(){
-			if(slideCounter <= 0)
-			{
-				console.log('cant go right');
-			}
-			else
-			{
+			if(!(slideCounter <= 0)){
 				elementCounter =0;
 				slideCounter--;
 				slideinit();
 			}
-			console.log(slideCounter);
 		};
 
 		function nextSlide(){
 			elementCounter = 0;
-			console.log('new slide start****************************');
-			console.log(allSlides.length - 1,"right limit & current is",slideCounter);
-			if(slideCounter >= allSlides.length-1)
-			{
-				console.log('cant go right');
-
-			}
-			else
-			{
-				console.log('within limit---------');
+			if(!(slideCounter >= allSlides.length-1)){
 				if(allSlides[slideCounter].transitionOut != 'None'){
-					console.log('animating outro of slide',slideCounter);
-
-					console.log('animating ',allSlides[slideCounter].transitionOut,' of ',slideCounter);
-
 					slide.setAttribute('class','slide animated '+allSlides[slideCounter].transitionOut)
 					slide.addEventListener("animationend", function(){
-						slide.setAttribute('class','slide');//+allSlides[slideCounter].transition);
-						//alert("anim end");
+						slide.setAttribute('class','slide');
 						slideCounter++;
 						slideinit();
 						slide.setAttribute('class','slide animated '+allSlides[slideCounter].transitionIn);
 						elementNext();
 						slide.addEventListener("animationend", function(){
-							slide.setAttribute('class','slide');//+allSlides[slideCounter].transition);
-
+							slide.setAttribute('class','slide');
 					}, false);
 					}, false);
 				}
@@ -129,34 +101,25 @@ function EzeeUI(allSlide,parentArea){
 					slide.setAttribute('class','slide animated '+allSlides[slideCounter].transitionIn);
 					elementNext();
 					slide.addEventListener("animationend", function(){
-						slide.setAttribute('class','slide');//+allSlides[slideCounter].transition);
+						slide.setAttribute('class','slide');
 					}, false);
 				}
-				console.log(slideCounter);
 			}
 		};
 		
 		window.onkeydown = function(e){
 			var e = e || window.event;
-			if (e.keyCode == '38') {
-				// up arrow
-				console.log("up arrow");
+			if (e.keyCode == '38'){	// up arrow
 				elementPrevious();
 			}
-			else if (e.keyCode == '40') {
-				// down arrow
+			else if (e.keyCode == '40'){// down arrow
 				elementNext();
-				console.log("down arrow");
 			}
-			else if (e.keyCode == '37')//left or previous
-			{
+			else if (e.keyCode == '37'){//left or previous
 				previousSlide();
-				console.log("left arrow");
 			}
-			else if (e.keyCode == '39')//right or next
-			{
+			else if (e.keyCode == '39'){//right or next
 				nextSlide();
-				console.log("right arrow");
 		 	}	
 		};
 
@@ -173,8 +136,6 @@ function EzeeUI(allSlide,parentArea){
 			mainSlide.style['position'] = 'absolute';
 			mainSlide.style['z-index'] = slideCounter;
 
-			console.log(mainSlide.style['width'],mainSlide.style['height'],"from init");
-		
 			for(var i=0;i<allSlides[slideCounter].styles.length;i++){
 				mainSlide.style[allSlides[slideCounter].styles[i].property]=allSlides[slideCounter].styles[i].propertyValue;
 			}
@@ -192,28 +153,18 @@ function EzeeUI(allSlide,parentArea){
 				{
 					element.style[allSlides[slideCounter].elements[i].styles[j].property]=allSlides[slideCounter].elements[i].styles[j].propertyValue;
 				}
-				console.log('transition In :',allSlides[slideCounter].elements[i].transitionIn,'transition Out: ',allSlides[slideCounter].elements[i].transitionOut);
-				if(allSlides[slideCounter].elements[i].transitionIn == 'None')
-				{
-					console.log('transition in none if element',i);
-				}
-				else{
+				if(!(allSlides[slideCounter].elements[i].transitionIn == 'None')){
 					element.style['display']='none';
 				}
-					mainSlide.appendChild(element);	
-					
-					console.log('Slide init ', slide);
-					allElement.push(element);
-
-				console.log(allSlides[slideCounter].transitionIn,allSlides[slideCounter].elements[i].transitionIn);
+				mainSlide.appendChild(element);	
+				allElement.push(element);
 			}
 			mainSlide.appendChild(document.createTextNode(slideCounter));
 			container.appendChild(mainSlide);
 			parentArea.appendChild(container);
 			slide = mainSlide;
-			console.log(allElement);	
-
 		};
+
 		var updateNavInfo = function(){
 			if(slideCounter<=allSlides.length-2){
 				next.setAttribute('class','next-bar active');
@@ -228,25 +179,19 @@ function EzeeUI(allSlide,parentArea){
 			else{
 				previous.setAttribute('class','previous-bar');
 			}
-				console.log('down arrow blah',elementCounter,allSlides[slideCounter].elements.length)
 
 			if(elementCounter == allSlides[slideCounter].elements.length-1 || allSlides[slideCounter].elements.length == 0){
 				down.setAttribute('class','down-bar');
-				console.log('down arrow blah',elementCounter,allSlides[slideCounter].elements.length)
 			}
 			else{
 				down.setAttribute('class','down-bar active');
-				console.log('down arrow blacj',elementCounter,allSlides[slideCounter].elements.length)
-
 			}
 
 			if(elementCounter == 0){
 				up.setAttribute('class','up-bar');
-				console.log('for button status',slideCounter,allSlides.length-1,'active state++++++++++++++++++++');
 			}
 			else{
 				up.setAttribute('class','up-bar active');
-				console.log('for button status',slideCounter,allSlides.length,'inactive state------------------');
 			}
 
 			

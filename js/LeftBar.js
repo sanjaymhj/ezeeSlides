@@ -23,23 +23,19 @@ function LeftBar(container,slides){
 
 		for (var i=0;i<allSlides.length;i++){
 			var slide = document.createElement('div');
-				//console.log(e.detail,"from slide addition in view");
 			slide.setAttribute('class','slides-thumbnail' );
 			for(var j=0;j<allSlides[i].styles.length;j++){
 				slide.style[allSlides[i].styles[j].property]=allSlides[i].styles[j].propertyValue;
-				console.log('wiritin the property');
 			}
 					
 		
 			slide.onclick = (function(slideId){
 				return function(){
-					console.log(slideId,"slideid from left bar");
 					var toWorkspace = new CustomEvent('slideToWorkSpace',{'detail':slideId});
-					console.log(i, 'th slide selected');
 					container.dispatchEvent(toWorkspace);
 				};} )(i);
 
-				thumbSlide.push(slide);
+			thumbSlide.push(slide);
 			self.slidesContainer.appendChild(slide);	
 		}
 	}
@@ -64,13 +60,9 @@ function LeftBar(container,slides){
 
 
 		self.addSlide.onclick =  function(){
-			console.log(self.slideCounter,"number of slides in the array before adding new one");
-			var ev1 = new CustomEvent('addSlide',{'detail':self.slideCounter});
-			
-			container.dispatchEvent(ev1);//js variable
-			self.slidesContainer.dispatchEvent(ev1);//ui
+			var addnewSlide = new CustomEvent('addSlide',{'detail':self.slideCounter});
+			container.dispatchEvent(addnewSlide);
 			self.slideCounter++;
-			console.log(self.slideCounter,"number of slides in the array after adding new one");
 
 		}
 		self.leftBar.appendChild(self.startSlide);

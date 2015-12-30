@@ -17,7 +17,6 @@ function EditorUI()
 	var centerArea = new CenterArea(container);
 	var propertyExists;
 	var slideContainer = document.createElement('div');
-	console.log(slideContainer);
 		
 	this.init = function() {
 		createLayout();
@@ -35,13 +34,10 @@ function EditorUI()
 	container.addEventListener('addSlide',function(e){
 		var slide = new Slide(allSlides.length);
 		allSlides.push(slide);
-		console.log(allSlides);	
 		leftBar.updateContainer(allSlides);
-		console.log(allSlides,"leftbar updated");
 	});
 
 	container.addEventListener('deleteElement',function(e){
-		console.log('delete this ', allSlides[focusSlide].elements[focusElement]);
 		allSlides[focusSlide].elements.splice(focusElement,1);
 		focusElement--;
 		if(focusElement<0)
@@ -56,9 +52,7 @@ function EditorUI()
 	});
 
 	container.addEventListener('deleteSlide',function(e){
-		console.log('delete this ', allSlides[focusSlide]);
 		allSlides.splice(focusSlide,1);
-		console.log(allSlides,"remaining slides after deleting");
 		if(allSlides.length>0)
 			leftBar.updateContainer(allSlides);
 		focusSlide--;
@@ -79,30 +73,15 @@ function EditorUI()
 	container.addEventListener('slideToWorkSpace',function(e){
 		focusSlide = e.detail;
 		slideStarted = false;
-		console.log("tool init");
-		console.log("in the main focusSlide.id", focusSlide);
-		console.log(allSlides[focusSlide],"--------------------------------------");
-
+		
 		centerArea.changeWorkspace(allSlides[focusSlide]);
 		workSlide = centerArea.getSlide();
 		workElements = centerArea.getAllElements();
-		console.log(workElements,"allElements From");
 		
 		
 	});
 
 	container.addEventListener('activeElementEvent',function(e){	
-		console.log(focusElement,"first one");
-		if(focusElement)
-		{
-			console.log("focusElement exists");
-			console.log('old focusSlide ',focusElementSlide,'old element',focusElement.elementId);
-		}
-		else{
-			console.log("focusElement doesnot exists");
-			console.log('focusElement now',focusElement);
-		}
-		
 		focusElementSlide = focusSlide;
 		focusElement = e.detail.elementId;
 		
@@ -112,7 +91,6 @@ function EditorUI()
 
 	container.addEventListener('changefontstyle',function(e){
 		changedProperty(e.detail,'font-family');
-		console.log(e.detail, 'is font style after change');
 	});
 
 	container.addEventListener('editSlide',function(e){
@@ -120,62 +98,44 @@ function EditorUI()
 		allSlides = JSON.parse(data);
 		leftBar.updateContainer(allSlides);
 	});
-	document.addEventListener('copy',function(e){   // e.clipboardData.setData('application/json', JSON.stringify(allSlides));
+	document.addEventListener('copy',function(e){
 		alert('copied'+JSON.stringify(allSlides));
 		e.clipboardData.setData('text/plain', JSON.stringify(allSlides));
 		e.preventDefault();
 	});
 
 	container.addEventListener('transitionIn',function(e){
-		console.log(e.detail, 'is transition change');
 		allSlides[focusSlide].transitionIn = e.detail;
 		workSlide.setAttribute('class','slide animated '+e.detail);
-		console.log(workSlide);
 		workSlide.addEventListener("animationend", function(){
-			workSlide.setAttribute('class','slide');// animated '+document.getElementsByClassName('slide')[0].transitionIn);
+			workSlide.setAttribute('class','slide');
 		}, false);
 	});
 
 	container.addEventListener('transitionOut',function(e){
 		
-		console.log(e.detail, 'is transition change');
 		allSlides[focusSlide].transitionOut = e.detail;
-		console.log(allSlides[focusSlide].transitionOut);
 		workSlide.setAttribute('class','slide animated '+e.detail);
 		workSlide.addEventListener("animationend", function(){
-			workSlide.setAttribute('class','slide');// animated '+document.getElementsByClassName('slide')[0].transitionIn);
+			workSlide.setAttribute('class','slide');
 		}, false);
 	});
 
 	container.addEventListener('elementTransitionIn',function(e){
-				workElements = centerArea.getAllElements();
-
-		console.log(e.detail, 'is element transition change in');
-
+		workElements = centerArea.getAllElements();
 		allSlides[focusSlide].elements[focusElement].transitionIn = e.detail;
-		//console.log('transition set to ',e.detail);
-		console.log('transition set to ',allSlides[focusSlide].elements[focusElement].transitionIn);
-		console.log(workElements,' getting all elements from element transition');
-		
-		console.log(workElements,'elements to be animated');
 		workElements[focusElement].setAttribute('class','animated '+e.detail);
-		//workElements[focusElement].addEventListener('animationend',function(){workElements[focusElement].setAttribute('class','');});
 	});
 
 	container.addEventListener('elementTransitionOut',function(e){
-				workElements = centerArea.getAllElements();
-
-		console.log(e.detail, 'is element transition change out');
+		workElements = centerArea.getAllElements();
 		allSlides[focusSlide].elements[focusElement].transitionOut = e.detail;
-		
-		console.log('transition set to ',allSlides[focusSlide].elements[focusElement].transitionOut);
 		workElements[focusElement].setAttribute('class','animated '+e.detail);
 		workElements[focusElement].addEventListener('animationend',function(){workElements[focusElement].setAttribute('class','');});
 	});
 
 	container.addEventListener('textChange',function(e){
 		allSlides[focusSlide].elements[focusElement].setText(e.detail);
-		console.log(allSlides[focusSlide].elements[focusElement].text, 'is text after change');
 	});
 
 	container.addEventListener('changeWidth',function(e){
@@ -232,19 +192,14 @@ function EditorUI()
 
 	container.addEventListener('slideclearBackground',function(e){
 		toggleslideProperty(e.detail,'background-color');
-		console.log("clear background of slide");
 	});
 
-
-
-var slideStarted = false;
+	var slideStarted = false;
 	container.addEventListener('startSlide',function(e){
 		slideStarted = true;
 		var elementCounter = 0;
 		startSlide();
 	});
-
-
 
 	//add text in the workspace
 	container.addEventListener('createText',function(e){
@@ -258,11 +213,7 @@ var slideStarted = false;
 		textElement.setElementStyle('display','inline-block');
 
 		allSlides[focusSlide].elements.push(textElement);
-		console.log(allSlides[focusSlide].elements.length);
 		centerArea.changeWorkspace(allSlides[focusSlide]);
-		console.log("create New text place");
-
-
 	});
  
 	function changedProperty (propertyValue,property){
@@ -271,7 +222,6 @@ var slideStarted = false;
 		{
 			if(allSlides[focusSlide].elements[focusElement].styles[i].property == property){
 				allSlides[focusSlide].elements[focusElement].styles[i].propertyValue = propertyValue;
-				console.log(property," set");
 				centerArea.changeWorkspace(allSlides[focusSlide]);
 				propertyExists = true;
 				break;
@@ -282,8 +232,6 @@ var slideStarted = false;
 			var newStyle = new Style(property, propertyValue);
 			allSlides[focusSlide].elements[focusElement].styles.push(newStyle);
 			centerArea.changeWorkspace(allSlides[focusSlide]);
-
-		 	console.log("in the main - new property added", propertyValue,property);
 		}
 	}
 
@@ -293,7 +241,6 @@ var slideStarted = false;
 		{
 			if(allSlides[focusSlide].elements[focusElement].styles[i].property == property){
 				allSlides[focusSlide].elements[focusElement].styles.splice(i,1);
-				console.log(property," unset");
 				centerArea.changeWorkspace(allSlides[focusSlide]);
 				propertyExists = true;
 				break;
@@ -305,18 +252,13 @@ var slideStarted = false;
 			allSlides[focusSlide].elements[focusElement].styles.push(newStyle);
 				centerArea.changeWorkspace(allSlides[focusSlide]);
 
-		 	console.log("in the main - new property added", propertyValue,property);
 		}
 	}
 
 	function startSlide(){
 		centerArea.clearWorkspace();
-		console.log(centerArea.getCenterArea());
 		var ezeeUI = new EzeeUI(allSlides, centerArea.getCenterArea());
 	}
-
-	
-
 
 	function changedslideProperty (propertyValue,property){
 		propertyExists=false;
@@ -324,10 +266,8 @@ var slideStarted = false;
 		{
 			if(allSlides[focusSlide].styles[i].property == property){
 				allSlides[focusSlide].styles[i].propertyValue = propertyValue;
-				console.log(property," set");
 				centerArea.changeWorkspace(allSlides[focusSlide]);
 				propertyExists = true;
-		 		console.log("in the changeslideproperty - property exists", propertyValue,property);
 
 				break;
 			}
@@ -337,8 +277,6 @@ var slideStarted = false;
 			var newStyle = new Style(property, propertyValue);
 			allSlides[focusSlide].styles.push(newStyle);
 			centerArea.changeWorkspace(allSlides[focusSlide]);
-
-		 	console.log("in the changeslideproperty - new property added", propertyValue,property);
 		}
 		leftBar.updateContainer(allSlides);
 	}
@@ -349,10 +287,8 @@ var slideStarted = false;
 		{
 			if(allSlides[focusSlide].styles[i].property == property){
 				allSlides[focusSlide].styles.splice(i,1);
-				console.log(property," unset");
 				centerArea.changeWorkspace(allSlides[focusSlide]);
 				propertyExists = true;
-				console.log("in the toggleslideProperty - new property added", propertyValue,property);
 
 				break;
 			}
@@ -361,12 +297,9 @@ var slideStarted = false;
 		{
 			var newStyle = new Style(property, propertyValue);
 			allSlides[focusSlide].styles.push(newStyle);
-				centerArea.changeWorkspace(allSlides[focusSlide]);
-
-		 	console.log("in the toggleslideProperty - new property added", propertyValue,property);
+			centerArea.changeWorkspace(allSlides[focusSlide]);
 		}
 		leftBar.updateContainer(allSlides);
 	}
-
 }
 var editorUI = new EditorUI();

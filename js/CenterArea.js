@@ -1,4 +1,3 @@
-
 function CenterArea(container){
 	var slideArea = document.createElement('div');
 	var self = this;
@@ -28,7 +27,6 @@ function CenterArea(container){
 
 	this.changeWorkspace = function(focusSlide){
 		self.clearWorkspace();
-		console.log(focusSlide,"from the center area");
 		var mainSlide = document.createElement('div');
 		mainSlide.setAttribute('class','slide');
 		for(var i=0;i<focusSlide.styles.length;i++){
@@ -44,7 +42,6 @@ function CenterArea(container){
 				element.setAttribute(focusSlide.elements[i].attributes[j].attribute,focusSlide.elements[i].attributes[j].attributeValue);
 			}
 
-			console.log(focusSlide.elements[i].type);
 			for(var j=0;j<focusSlide.elements[i].styles.length;j++)
 			{
 				element.style[focusSlide.elements[i].styles[j].property]=focusSlide.elements[i].styles[j].propertyValue;
@@ -65,9 +62,7 @@ function CenterArea(container){
 			}
 			allElements.push(element);
 		}	
-		console.log(allElements);
 		slideArea.appendChild(mainSlide);
-		console.log(slideArea);
 		self.slide = mainSlide;
 	};
 	this.setupSlides = function(mainSlide){

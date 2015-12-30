@@ -46,8 +46,6 @@ function Tools(container){
 	this.changeFocusSlide =  function(focusEle){
 		focusElement = focusEle;
 		focusSlide = focusEle;
-		
-		console.log(focusElement,"from tools focus Element",focusSlide," and this is the focusSlide");
 	}
 
 	topTools.addEventListener('evtChangepositionX',function(e){console.log(e.detail);});
