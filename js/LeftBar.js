@@ -20,6 +20,7 @@ function LeftBar(container,slides){
 	this.editSlide.setAttribute('class','edit-slide');
 
 	this.slideCounter=0;
+	var focusSlide = 0;
 
 	var self = this;
 	this.updateContainer = function(allSlides){
@@ -30,17 +31,27 @@ function LeftBar(container,slides){
 
 		for (var i=0;i<allSlides.length;i++){
 			var slide = document.createElement('div');
-			slide.setAttribute('class','slides-thumbnail' );
+			if(i==focusSlide){
+				slide.setAttribute('class','slides-thumbnail focus' );
+			}
+			else
+			{
+				slide.setAttribute('class','slides-thumbnail' );
+			}
 			slide.appendChild(document.createTextNode(i+1));
 			for(var j=0;j<allSlides[i].styles.length;j++){
 				slide.style[allSlides[i].styles[j].property]=allSlides[i].styles[j].propertyValue;
-			}
-					
+			}		
 		
 			slide.onclick = (function(slideId){
 				return function(){
 					var toWorkspace = new CustomEvent('slideToWorkSpace',{'detail':slideId});
 					container.dispatchEvent(toWorkspace);
+					for(var j=0;j<thumbSlide.length;j++){
+						thumbSlide[j].setAttribute('class','slides-thumbnail');
+					}
+					focusSlide = slideId;
+					this.setAttribute('class','slides-thumbnail focus');
 				};} )(i);
 
 			thumbSlide.push(slide);
@@ -76,9 +87,9 @@ function LeftBar(container,slides){
 		}
 		self.leftBar.appendChild(self.startSlide);
 		self.leftBar.appendChild(self.editSlide);
-
-		self.leftBar.appendChild(self.slidesContainer);
 		self.leftBar.appendChild(self.addSlide);
+		self.leftBar.appendChild(self.slidesContainer);
+		
 		container.appendChild(self.leftBar);
 
 	}
