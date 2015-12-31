@@ -16,28 +16,25 @@
 {
 	width:15%;
 	float:left;
-	/*background: red;*/
 }
 
 .left-bar .start-slideshow
 {
 	top : 0px;
-	width : 50px;
+	width : 52px;
 	color : #fff;
-	display:inline-block;
+	display: inline-block;
 
 	margin : 5px auto;
 	background : #4caf50;
 	text-align : center;
-	border-radius : 50px;
-	line-height :50px;
-	height : 50px;
-	font-size : 25px;
+	border-radius : 2px;
+	line-height :36px;
+	height : 37px;
+	font-size : 18px;
 	margin:10px;
 }
-.btn-lg{
 
-}
 .no-slide{
 	background:url(../images/1.png);
 }
@@ -47,45 +44,54 @@
 
 .left-bar .slides-thumbnail 
 {
-	/*margin: 2px;*/
 	width:80%;
 	margin : 5px auto;
 	height : 100px;
 	background: white;
-	/*float:left;*/
 	text-align: center;
 }
 .left-bar .add-slides
 {
-	bottom:0px;
-	width:50px;
-	color:#fff;
-
+	
 	margin:0 auto;
+
 	background: #f44336;
-	text-align: center;
-	border-radius: 50px;
-	line-height:50px;
-	height:50px;
-	font-size:25px;
+	bottom : 0px;
+	width : 52px;
+	color : #fff;
+	
+	text-align : center;
+	border-radius : 2px;
+	line-height :36px;
+	height : 37px;
+	font-size : 18px;
+	
 }
 
 .left-bar .edit-slide
 {
-	bottom:0px;
-	width:50px;
-	color:#fff;
-	display:inline-block;
 
-	margin:0 auto;
 	background: #2196fa;
-	text-align: center;
-	border-radius: 50px;
-	line-height:50px;
-	height:50px;
-	font-size:25px;
-	margin:10px;
+	top : 0px;
+	width : 52px;
+	color : #fff;
+	display: inline-block;
 
+	text-align : center;
+	border-radius : 2px;
+	line-height :36px;
+	height : 37px;
+	font-size : 18px;
+	
+}
+
+.left-bar .start-slideshow:hover
+{
+	background : #43a047;
+}
+.left-bar .edit-slide:hover
+{
+	background: #1e88e5;	
 }
 
 .left-bar .add-slides:hover
@@ -107,12 +113,12 @@
 {
 	overflow-y: scroll;
 	margin : 5px auto;
-	height : 535px;
+	height : 513px;
 	background: #afafaf;
 	/*float:left;*/
 	text-align : center;
 }
-.top-tools
+.edit-tools
 {
 	float : right;
 	width : 19%;
@@ -227,18 +233,19 @@
 
 .slides-area
 {
-		width:60%;
-		float:left;
-		padding:1%;
-		position:relative;
-		overflow:hidden;
+	top:65px;
+	width:60%;
+	float:left;
+	padding:1%;
+	position:relative;
+	overflow:hidden;
 }
 .slides-area.show
 {
-		float:left;
-		padding:1%;
-		position:relative;
-		overflow:hidden;
+	float:left;
+	padding:1%;
+	position:relative;
+	overflow:hidden;
 }
 .tool-seperator
 {
@@ -261,14 +268,13 @@
 }
 .slides-area .slide
 {
+	color:#aeaeae;
 	position : relative;
 	float : left;
 	width : 819px;
 	height : 460px;
-	/*background : #e1bee8;*/
 	margin:0px 0px 15px 0px;
 	border:1px solid #000;
-
 }
 
 .slide-control
@@ -304,7 +310,12 @@
 	right:25px;
 	bottom:50px;
 }
-
+.page-number{
+	position:absolute;
+	z-index:200;
+	bottom:0px;
+	right:0px;
+}
 .down-bar{
 	width:25px;
 	height:25px;

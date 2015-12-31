@@ -30,9 +30,8 @@
 {
 	position : relative;
 	float : left;
-  background-color:white;
+  	background-color:white;
 	
-	/*background : #e1bee8;*/
 	margin:0px 0px 15px 0px;
 
 }
@@ -113,10 +112,12 @@
 	background:url(../../images/down.png) 50% 50% no-repeat;
 }
 
-
-	
-
-
+.page-number{
+	position:absolute;
+	z-index:200;
+	bottom:0px;
+	right:0px;
+}
 
 /* Controls */
 
@@ -137,11 +138,6 @@
 	height:100%;
 
 }
-
-
-
-
-
 
 .clearfix:before,
 .clearfix:after {

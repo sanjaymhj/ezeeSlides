@@ -3,51 +3,65 @@ function Tools(container){
 
 	var topTools = document.createElement('div');
 	topTools.setAttribute('class','slides-contianer');
-
-	var focusSlide;
-	var focusElement;
 	
-	this.init = function(){
-		topTools.setAttribute('class', 'top-tools');
+	var slideTools = document.createElement('div');
+	slideTools.setAttribute('class', 'edit-tools');
+		
+	var textTools = document.createElement('div');
+	textTools.setAttribute('class', 'edit-tools');
+		
+	this.initSlideTools = function(){
 		
 		var div1=document.createElement('div');
 		div1.appendChild(document.createTextNode('Slide Styles'));
 		div1.setAttribute('class','tool-seperator');
 		
-		topTools.appendChild(div1);
-		topTools.appendChild(document.createTextNode(' Background-Color : '));
+		slideTools.appendChild(div1);
+		slideTools.appendChild(document.createTextNode(' Background-Color : '));
 
-		var slideBackground = new SlideBackgroundColor(topTools,container);
+		var slideBackground = new SlideBackgroundColor(slideTools,container);
 		
-		var transition = new Transition(topTools,container);
-		var deleteSlide = new DeleteSlide(topTools,container);
-			
+		var transition = new Transition(slideTools,container);
+		var deleteSlide = new DeleteSlide(slideTools,container);
 		var div2=document.createElement('div');
 		div2.appendChild(document.createTextNode('Text Styles'));
 		div2.setAttribute('class','tool-seperator');
-		topTools.appendChild(div2);
-		var newText = new TextBox(topTools,container);
+		slideTools.appendChild(div2);
+		var newText = new TextBox(slideTools,container);
 
-		var deleteElement = new DeleteElement(topTools,container);
-		var divSize = new ChangeSize(topTools,container);	
-		var changePosition = new ChangePosition(topTools,container);		
-		var fontFamily = new FontFamily(topTools,container);
-		var fontSize = new FontSize(topTools,container);
-		var bold = new Bold(topTools,container);
-		var italics = new Italics(topTools,container);
-		var underline = new Underline(topTools,container);
-		var elementBackgroundColor = new ElementBackgroundColor(topTools,container);
-		var textAlign = new TextAlign(topTools,container);
-		var fontColor = new FontColor(topTools,container);
-		var elementTransition = new ElementTransition(topTools, container);
-		
+		topTools.appendChild(slideTools);
 		container.appendChild(topTools);
 	}
-	this.changeFocusSlide =  function(focusEle){
-		focusElement = focusEle;
-		focusSlide = focusEle;
+	
+	this.initTextTools = function(){
+		
+		var deleteElement = new DeleteElement(slideTools,container);
+		var divSize = new ChangeSize(textTools,container);	
+		var changePosition = new ChangePosition(textTools,container);		
+		var fontFamily = new FontFamily(textTools,container);
+		var fontSize = new FontSize(textTools,container);
+		var bold = new Bold(textTools,container);
+		var italics = new Italics(textTools,container);
+		var underline = new Underline(textTools,container);
+		var elementBackgroundColor = new ElementBackgroundColor(textTools,container);
+		var textAlign = new TextAlign(textTools,container);
+		var fontColor = new FontColor(textTools,container);
+		var elementTransition = new ElementTransition(textTools, container);
+		topTools.appendChild(textTools);
+		container.appendChild(topTools);
+		
 	}
 
-	topTools.addEventListener('evtChangepositionX',function(e){console.log(e.detail);});
+	this.clearAllTools = function(){
+		while (slideTools.hasChildNodes()) {
+		    slideTools.removeChild(slideTools.lastChild);
+		}
+		while (textTools.hasChildNodes()) {
+		    textTools.removeChild(textTools.lastChild);
+		}
+		while (topTools.hasChildNodes()) {
+		    topTools.removeChild(topTools.lastChild);
+		}
+	}
 }
 

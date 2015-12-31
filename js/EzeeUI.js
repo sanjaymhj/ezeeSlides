@@ -23,19 +23,14 @@ function EzeeUI(allSlide,parentArea){
 	this.getAllSlides = function(){return allSlides;}
 
 	this.init = function() {
-		createLayout();
+		slideEvent();
 	}
 	
 	this.init();
 
-	function createLayout(){
-		slideEvent();
-	}
-
 	function slideEvent(){
 		var slideCounter = 0;
 		var elementCounter = 0;
-		sliderMarginLeft = parseInt(slideContainer.style.marginLeft);
 		sliderWidth = 0;
 		windowWidth = parentArea.offsetWidth-parentArea.offsetPadding;
 		windowHeight = parentArea.offsetHeight-parentArea.offsetPadding;
@@ -159,7 +154,13 @@ function EzeeUI(allSlide,parentArea){
 				mainSlide.appendChild(element);	
 				allElement.push(element);
 			}
-			mainSlide.appendChild(document.createTextNode(slideCounter));
+			var pageNumber = document.createElement('span');
+			pageNumber.setAttribute('class','page-number');
+
+			pageNumber.appendChild(document.createTextNode(slideCounter+1+"/"+allSlides.length));
+			console.log(pageNumber);
+			mainSlide.appendChild(pageNumber);
+			// mainSlide.appendChild(document.createTextNode(slideCounter+1+"/"+allSlides.length));
 			container.appendChild(mainSlide);
 			parentArea.appendChild(container);
 			slide = mainSlide;

@@ -20,22 +20,15 @@ function EzeeUI(allSlide,parentArea){
 	var slideContainer = document.createElement('div');
 	var allElement =[];	
 
-	this.getAllSlides = function(){return allSlides;}
-
-	this.init = function() {
-		createLayout();
-	}
 	
-	this.init();
-
-	function createLayout(){
+	this.init = function() {
 		slideEvent();
 	}
-
+	this.init();
+	
 	function slideEvent(){
 		var slideCounter = 0;
 		var elementCounter = 0;
-		sliderMarginLeft = parseInt(slideContainer.style.marginLeft);
 		sliderWidth = 0;
 		windowWidth = parentArea.offsetWidth-parentArea.offsetPadding;
 		windowHeight = parentArea.offsetHeight-parentArea.offsetPadding;
@@ -66,8 +59,8 @@ function EzeeUI(allSlide,parentArea){
 					allElement[elementCounter].addEventListener('animationend',function(){
 						allElement[elementCounter].setAttribute('class','');
 					});
-				 }
-				 elementCounter++;
+				}
+				elementCounter++;
 			}
 		};
 
@@ -92,7 +85,7 @@ function EzeeUI(allSlide,parentArea){
 						elementNext();
 						slide.addEventListener("animationend", function(){
 							slide.setAttribute('class','slide');
-					}, false);
+						}, false);
 					}, false);
 				}
 				else{
@@ -122,6 +115,37 @@ function EzeeUI(allSlide,parentArea){
 				nextSlide();
 		 	}	
 		};
+
+		
+		var updateNavInfo = function(){
+			if(slideCounter<=allSlides.length-2){
+				next.setAttribute('class','next-bar active');
+			}
+			else{
+				next.setAttribute('class','next-bar');
+			}
+
+			if(slideCounter>0){
+				previous.setAttribute('class','previous-bar active');
+			}
+			else{
+				previous.setAttribute('class','previous-bar');
+			}
+
+			if(elementCounter == allSlides[slideCounter].elements.length-1 || allSlides[slideCounter].elements.length == 0){
+				down.setAttribute('class','down-bar');
+			}
+			else{
+				down.setAttribute('class','down-bar active');
+			}
+
+			if(elementCounter == 0){
+				up.setAttribute('class','up-bar');
+			}
+			else{
+				up.setAttribute('class','up-bar active');
+			}
+		}
 
 		this.slideinit = function(){
 			updateNavInfo();
@@ -159,43 +183,17 @@ function EzeeUI(allSlide,parentArea){
 				mainSlide.appendChild(element);	
 				allElement.push(element);
 			}
-			mainSlide.appendChild(document.createTextNode(slideCounter));
+			var pageNumber = document.createElement('span');
+			pageNumber.setAttribute('class','page-number');
+
+			pageNumber.appendChild(document.createTextNode(slideCounter+1+"/"+allSlides.length));
+			mainSlide.appendChild(pageNumber);
 			container.appendChild(mainSlide);
 			parentArea.appendChild(container);
 			slide = mainSlide;
 		};
+		this.slideinit();
 
-		var updateNavInfo = function(){
-			if(slideCounter<=allSlides.length-2){
-				next.setAttribute('class','next-bar active');
-			}
-			else{
-				next.setAttribute('class','next-bar');
-			}
-
-			if(slideCounter>0){
-				previous.setAttribute('class','previous-bar active');
-			}
-			else{
-				previous.setAttribute('class','previous-bar');
-			}
-
-			if(elementCounter == allSlides[slideCounter].elements.length-1 || allSlides[slideCounter].elements.length == 0){
-				down.setAttribute('class','down-bar');
-			}
-			else{
-				down.setAttribute('class','down-bar active');
-			}
-
-			if(elementCounter == 0){
-				up.setAttribute('class','up-bar');
-			}
-			else{
-				up.setAttribute('class','up-bar active');
-			}
-
-			
-		}
 
 		next.onclick = function(){
 			nextSlide();
@@ -211,7 +209,5 @@ function EzeeUI(allSlide,parentArea){
 		down.onclick = function(){
 			elementNext();
 		};
-
-		this.slideinit();
 	};
 }

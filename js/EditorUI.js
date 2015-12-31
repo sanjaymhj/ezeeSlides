@@ -28,7 +28,6 @@ function EditorUI()
 	function createLayout(){
 		leftBar.init();
 		centerArea.init();
-		tools.init();
 	}
 
 	container.addEventListener('addSlide',function(e){
@@ -40,15 +39,15 @@ function EditorUI()
 	container.addEventListener('deleteElement',function(e){
 		allSlides[focusSlide].elements.splice(focusElement,1);
 		focusElement--;
-		if(focusElement<0)
+		if(focusElement<=0)
 		{
 			centerArea.changeWorkspace(allSlides[focusSlide]);
 		}
 		else{
 			focusElement = 0;
 		}
-
-
+		tools.clearAllTools();
+		tools.initSlideTools();
 	});
 
 	container.addEventListener('deleteSlide',function(e){
@@ -65,28 +64,27 @@ function EditorUI()
 			focusSlide = 0;
 			centerArea.clearWorkspace();
 		}
-
 		leftBar.updateContainer(allSlides);
-		
+		tools.clearAllTools();
+		tools.initSlideTools();
 	});
 	
 	container.addEventListener('slideToWorkSpace',function(e){
 		focusSlide = e.detail;
 		slideStarted = false;
-		
+		tools.clearAllTools();
+		tools.initSlideTools();
 		centerArea.changeWorkspace(allSlides[focusSlide]);
 		workSlide = centerArea.getSlide();
 		workElements = centerArea.getAllElements();
-		
-		
 	});
 
 	container.addEventListener('activeElementEvent',function(e){	
 		focusElementSlide = focusSlide;
 		focusElement = e.detail.elementId;
-		
-
-	
+		tools.clearAllTools();
+		tools.initSlideTools();
+		tools.initTextTools();
 	});
 
 	container.addEventListener('changefontstyle',function(e){
@@ -94,7 +92,7 @@ function EditorUI()
 	});
 
 	container.addEventListener('editSlide',function(e){
-		var data = window.prompt();
+		var data = window.prompt("Enter the JSON of the existing slide: ");
 		allSlides = JSON.parse(data);
 		leftBar.updateContainer(allSlides);
 	});

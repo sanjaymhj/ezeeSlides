@@ -5,12 +5,19 @@ function LeftBar(container,slides){
 	var thumbSlide=[];
 	this.addText = document.createTextNode('+');
 
-	this.startText = document.createTextNode('S');	
+	this.startText = document.createTextNode('Show');	
 	this.startSlide = document.createElement('div');
 
-	this.editText = document.createTextNode('E');
+	this.editText = document.createTextNode('Edit');
 	this.editSlide = document.createElement('div');
 	this.editSlide.appendChild(this.editText);
+
+
+	this.leftBar.setAttribute('class','left-bar');
+	this.slidesContainer.setAttribute('class','slides-container');
+	this.addSlide.setAttribute('class','add-slides');
+	this.startSlide.setAttribute('class','start-slideshow');
+	this.editSlide.setAttribute('class','edit-slide');
 
 	this.slideCounter=0;
 
@@ -24,6 +31,7 @@ function LeftBar(container,slides){
 		for (var i=0;i<allSlides.length;i++){
 			var slide = document.createElement('div');
 			slide.setAttribute('class','slides-thumbnail' );
+			slide.appendChild(document.createTextNode(i+1));
 			for(var j=0;j<allSlides[i].styles.length;j++){
 				slide.style[allSlides[i].styles[j].property]=allSlides[i].styles[j].propertyValue;
 			}
@@ -43,19 +51,20 @@ function LeftBar(container,slides){
 	this.init = function(){
 		self.startSlide.appendChild(self.startText);
 		self.addSlide.appendChild(self.addText);
-
-		self.leftBar.setAttribute('class','left-bar');
-		self.slidesContainer.setAttribute('class','slides-container');
-		self.addSlide.setAttribute('class','add-slides');
-		self.startSlide.setAttribute('class','start-slideshow');
-		self.editSlide.setAttribute('class','edit-slide');
 		
-		self.startSlide.addEventListener('click', function(){self.slideShow();});
+		self.startSlide.addEventListener('click', function(){
+			if(slides.length!=0)
+			{
+				self.slideShow();
+			}
+			else{
+				alert('No slides made.');
+			}
+		});
 
 		self.editSlide.addEventListener('click', function(){
 			var editEvent = new CustomEvent('editSlide',{});
 			container.dispatchEvent(editEvent);
-
 		});
 
 
