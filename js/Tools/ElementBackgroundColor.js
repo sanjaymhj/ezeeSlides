@@ -20,6 +20,11 @@ function ElementBackgroundColor(topTools,container){
 		topTools.appendChild(document.createElement('div'));
 
 	}
+
+	this.setElementBackgroundColor = function(color){
+		backgroundColorInput.value = color;
+	}
+
 	backgroundColorInput.onclick = function(){
 		var changeBackground = new CustomEvent('changeBackground',{'detail':backgroundColorInput.value});
 		container.dispatchEvent(changeBackground);

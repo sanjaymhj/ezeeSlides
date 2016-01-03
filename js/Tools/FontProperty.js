@@ -1,8 +1,9 @@
 function FontSize(parentElements,container){
 	var parentElement = parentElements;
 	var container = container;
+	var changeFont = document.createElement('input');
+
 	this.init = function(){
-		var changeFont = document.createElement('input');
 		var label = document.createTextNode('Font-size : ');
 		parentElements.appendChild(label);
 		changeFont.setAttribute('type','number');
@@ -14,6 +15,9 @@ function FontSize(parentElements,container){
 			container.dispatchEvent(changefont);
 		};
 	}
+	this.setSize = function(size){
+		changeFont.value = parseInt(size)/100*16;
+	}
 	this.init();
 }
 
@@ -21,8 +25,9 @@ function FontFamily(parentElements,container){
 	var fontFamily = ['Arial','Times New Roman','Papyrus','Consolas','Comic Sans MS','Chiller','Impact'];
 	var parentElement = parentElements;
 	var container = container;
+	var changeFontFamily = document.createElement('select');
+
 	this.init = function(){
-		var changeFontFamily = document.createElement('select');
 		var label = document.createTextNode('Font Style : ');
 		parentElements.appendChild(label);
 		
@@ -42,6 +47,9 @@ function FontFamily(parentElements,container){
 			var changefontstyle = new CustomEvent('changefontstyle',{'detail':font});
 			container.dispatchEvent(changefontstyle);
 		};
+	}
+	this.setFont = function(font){
+		changeFontFamily.value = font;
 	}
 	this.init();
 }
@@ -156,8 +164,9 @@ function TextAlign(parentElements,container){
 function FontColor(parentElements,container){
 	var parentElement = parentElements;
 	var container = container;
+	var fontColor = document.createElement('input');
+
 	this.init = function(){
-		var fontColor = document.createElement('input');
 		fontColor.setAttribute('class','btn-sm');
 		fontColor.setAttribute('type','color');
 		fontColor.style['display']='inline-block';
@@ -174,6 +183,9 @@ function FontColor(parentElements,container){
 			var fontcolor = new CustomEvent('fontColor',{'detail':fontColor.value});
 			container.dispatchEvent(fontcolor);
 		};
+	}
+	this.setColor = function(color){
+		fontColor.value = color;
 	}
 	this.init();
 }

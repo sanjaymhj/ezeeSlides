@@ -1,17 +1,17 @@
 ::-webkit-scrollbar {
     width: 12px;
     background:#d9d9d9;
-    -webkit-box-shadow:inset 0 0 3px rgba(0,0,0,0.3); 
+    -webkit-box-shadow:inset 0 0 3px rgba(0,0,0,0.3);
 }
- 
+
 ::-webkit-scrollbar-track {
-    -webkit-box-shadow: 0 0 6px rgba(0,0,0,0.3); 
+    -webkit-box-shadow: 0 0 6px rgba(0,0,0,0.3);
     border-radius: 2px;
 }
- 
+
 ::-webkit-scrollbar-thumb {
     border-radius: 2px;
-    -webkit-box-shadow: 0 0 6px rgba(0,0,0,0.5); 
+    -webkit-box-shadow: 0 0 6px rgba(0,0,0,0.5);
 }
 *{
 	padding : 0;
@@ -46,9 +46,8 @@
 	border-radius : 2px;
 	line-height :36px;
 	height : 37px;
-	font-size : 16px;
-
-	font-family:'Arial';
+	font-size : 14px;
+  font-family:'Arial';
 	margin:7px;
 }
 
@@ -60,9 +59,13 @@
 }
 .left-bar .focus{
 	border:1px solid #989898;
+  -webkit-box-shadow: 9px 10px 50px 0px rgba(138,138,138,1);
+ -moz-box-shadow: 9px 10px 50px 0px rgba(138,138,138,1);
+ box-shadow: 9px 10px 50px 0px rgba(138,138,138,1);
+ transition: box-shadow .2s ease;
 }
 
-.left-bar .slides-thumbnail 
+.left-bar .slides-thumbnail
 {
 	width:80%;
 	margin : 5px auto;
@@ -80,13 +83,13 @@
 	border-radius : 2px;
 	line-height :36px;
 	height : 37px;
-	font-size : 16px;
-	margin:7px;	
+	font-size : 14px;
+	margin:7px;
 	font-family:'Arial';
 }
 
 .left-bar .edit-slide
-{	
+{
 	font-family:'Arial';
 	background: #2196fa;
 	width : 52px;
@@ -96,18 +99,21 @@
 	border-radius : 2px;
 	line-height :36px;
 	height : 37px;
-	font-size : 16px;
+	font-size : 14px;
 	margin:7px;
-	
+
 }
 
 .left-bar .start-slideshow:hover
 {
 	background : #43a047;
+  font-weight:bold;
+
 }
 .left-bar .edit-slide:hover
 {
-	background: #1e88e5;	
+	background: #1e88e5;
+  font-weight:bold;
 }
 
 .left-bar .add-slides:hover
@@ -140,7 +146,8 @@
 	background-color:#e4e4e4;
 	padding:0px 20px;
 	border-left: 1px solid #afafaf;
-	
+	font-size:13px;
+
 }
 .slides-controller
 {
@@ -263,6 +270,9 @@
 	padding:1%;
 	position:relative;
 	overflow:hidden;
+  -webkit-box-shadow: 9px 10px 50px 0px rgba(138,138,138,1);
+ -moz-box-shadow: 9px 10px 50px 0px rgba(138,138,138,1);
+ box-shadow: 9px 10px 50px 0px rgba(138,138,138,1);
 }
 .tool-seperator
 {
@@ -291,6 +301,10 @@
 	height : 460px;
 	margin:0px 0px 15px 0px;
 	border:1px solid #898989;
+  -webkit-box-shadow: 9px 10px 50px 0px rgba(138,138,138,1);
+ -moz-box-shadow: 9px 10px 50px 0px rgba(138,138,138,1);
+ box-shadow: 9px 10px 50px 0px rgba(138,138,138,1);
+
 
 }
 
@@ -374,7 +388,7 @@
 }
 
 
-	
+
 
 
 

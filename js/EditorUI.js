@@ -47,7 +47,7 @@ function EditorUI()
 			focusElement = 0;
 		}
 		tools.clearAllTools();
-		tools.initSlideTools();
+		tools.initSlideTools(allSlides[focusSlide]);
 	});
 
 	container.addEventListener('deleteSlide',function(e){
@@ -66,14 +66,14 @@ function EditorUI()
 		}
 		leftBar.updateContainer(allSlides);
 		tools.clearAllTools();
-		tools.initSlideTools();
+		tools.initSlideTools(allSlides[focusSlide]);
 	});
 	
 	container.addEventListener('slideToWorkSpace',function(e){
 		focusSlide = e.detail;
 		slideStarted = false;
 		tools.clearAllTools();
-		tools.initSlideTools();
+		tools.initSlideTools(allSlides[focusSlide]);
 		centerArea.changeWorkspace(allSlides[focusSlide]);
 		workSlide = centerArea.getSlide();
 		workElements = centerArea.getAllElements();
@@ -83,8 +83,8 @@ function EditorUI()
 		focusElementSlide = focusSlide;
 		focusElement = e.detail.elementId;
 		tools.clearAllTools();
-		tools.initSlideTools();
-		tools.initTextTools();
+		tools.initSlideTools(allSlides[focusSlide]);
+		tools.initTextTools(allSlides[focusSlide].elements[focusElement]);
 	});
 
 	container.addEventListener('changefontstyle',function(e){
@@ -93,12 +93,39 @@ function EditorUI()
 
 	container.addEventListener('editSlide',function(e){
 		var data = window.prompt("Enter the JSON of the existing slide: ");
-		allSlides = JSON.parse(data);
+		if(data == null){
+			allSlides = [];
+		}
+		else
+		{
+			allSlides = JSON.parse(data);
+		}
+		for (var i=0;i<allSlides.length;i++){
+			for(var j=0;j<allSlides[i].elements.length;j++){
+				for(var k=0;k<allSlides[i].elements[j].attributes.length;k++){
+					if(allSlides[i].elements[j].attributes[k].attribute == 'contentEditable'){
+						allSlides[i].elements[j].attributes[k].attributeValue = true;
+					}
+				}
+			}
+		}
 		leftBar.updateContainer(allSlides);
 	});
+	
 	document.addEventListener('copy',function(e){
-		alert('copied'+JSON.stringify(allSlides));
-		e.clipboardData.setData('text/plain', JSON.stringify(allSlides));
+		var slidesExport = JSON.parse(JSON.stringify(allSlides));
+		// slidesExport = document.extend( true, {}, allSlides );
+		for (var i=0;i<slidesExport.length;i++){
+			for(var j=0;j<slidesExport[i].elements.length;j++){
+				for(var k=0;k<slidesExport[i].elements[j].attributes.length;k++){
+					if(slidesExport[i].elements[j].attributes[k].attribute == 'contentEditable'){
+						slidesExport[i].elements[j].attributes[k].attributeValue = false;
+					}
+				}
+			}
+		}
+		alert('copied'+JSON.stringify(slidesExport));
+		e.clipboardData.setData('text/plain', JSON.stringify(slidesExport));
 		e.preventDefault();
 	});
 
@@ -133,7 +160,7 @@ function EditorUI()
 	});
 
 	container.addEventListener('textChange',function(e){
-		allSlides[focusSlide].elements[focusElement].setText(e.detail);
+		allSlides[focusSlide].elements[focusElement].text = e.detail;
 	});
 
 	container.addEventListener('changeWidth',function(e){
@@ -204,10 +231,17 @@ function EditorUI()
 		var textElement = new Element('span',allSlides[focusSlide].elements.length);
 		textElement.setElementAttribute('contentEditable','true');
 		textElement.setText('Your Text Here');
-		textElement.setElementStyle('top','0%');
+		textElement.setElementStyle('top','10%');
+		textElement.setElementStyle('left','25%');
+
 		textElement.setElementStyle('position','absolute');
 		textElement.setElementStyle('width','50%');
-		textElement.setElementStyle('font-size','100%');
+		textElement.setElementStyle('height','10%');
+		textElement.setElementStyle('font-family','Arial');
+		textElement.setElementStyle('color','black');
+		textElement.setElementStyle('text-align','center');
+
+		textElement.setElementStyle('font-size','200%');
 		textElement.setElementStyle('display','inline-block');
 
 		allSlides[focusSlide].elements.push(textElement);

@@ -15,6 +15,9 @@ function SlideBackgroundColor(topTools,container){
 		topTools.appendChild(slidebackgroundColor);
 		topTools.appendChild(document.createElement('div'));
 	}
+	this.setSlideBackground = function(color){
+		slidebackgroundColorInput.value = color;
+	}
 
 	slidebackgroundColorInput.onclick = function(){
 		var slidechangeBackground = new CustomEvent('slidechangeBackground',{'detail':slidebackgroundColorInput.value});

@@ -3,12 +3,12 @@ function LeftBar(container,slides){
 	this.slidesContainer = document.createElement('div');
 	this.addSlide = document.createElement('div');
 	var thumbSlide=[];
-	this.addText = document.createTextNode('+');
+	this.addText = document.createTextNode('Add');
 
-	this.startText = document.createTextNode('Show');	
+	this.startText = document.createTextNode('Show');
 	this.startSlide = document.createElement('div');
 
-	this.editText = document.createTextNode('Edit');
+	this.editText = document.createTextNode('Import');
 	this.editSlide = document.createElement('div');
 	this.editSlide.appendChild(this.editText);
 
@@ -41,8 +41,8 @@ function LeftBar(container,slides){
 			slide.appendChild(document.createTextNode(i+1));
 			for(var j=0;j<allSlides[i].styles.length;j++){
 				slide.style[allSlides[i].styles[j].property]=allSlides[i].styles[j].propertyValue;
-			}		
-		
+			}
+
 			slide.onclick = (function(slideId){
 				return function(){
 					var toWorkspace = new CustomEvent('slideToWorkSpace',{'detail':slideId});
@@ -55,14 +55,14 @@ function LeftBar(container,slides){
 				};} )(i);
 
 			thumbSlide.push(slide);
-			self.slidesContainer.appendChild(slide);	
+			self.slidesContainer.appendChild(slide);
 		}
 	}
 
 	this.init = function(){
 		self.startSlide.appendChild(self.startText);
 		self.addSlide.appendChild(self.addText);
-		
+
 		self.startSlide.addEventListener('click', function(){
 			if(slides.length!=0)
 			{
@@ -89,7 +89,7 @@ function LeftBar(container,slides){
 		self.leftBar.appendChild(self.editSlide);
 		self.leftBar.appendChild(self.addSlide);
 		self.leftBar.appendChild(self.slidesContainer);
-		
+
 		container.appendChild(self.leftBar);
 
 	}
@@ -102,4 +102,3 @@ function LeftBar(container,slides){
 		return self.slideCounter;
 	}
 }
-

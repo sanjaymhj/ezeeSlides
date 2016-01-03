@@ -3,11 +3,14 @@ function Transition(parentElements,container){
 	var outroTransition = ['None','bounceOut','bounceOutDown','bounceOutLeft','bounceOutRight','bounceOutUp','fadeOut','fadeOutDown','fadeOutDownBig','fadeOutLeft','fadeOutLeftBig','fadeOutRight','fadeOutRightBig','fadeOutUp','fadeOutUpBig','flip','flipOutX','flipOutY','flipOutY','lightSpeedOut','rotateOut','rotateOutDownLeft','rotateOutDownRight','rotateOutDownLeft','rotateOutUpRight','slideOutUp','slideOutDown','slideOutLeft','slideOutRight','zoomOut','zoomOutDown','zoomOutLeft','rollOut']
 	var parentElement = parentElements;
 	var container = container;
+
+	var introSelect = document.createElement('select');
+	var outroSelect = document.createElement('select');
+
 	this.init = function(){
 		var label = document.createTextNode('Transition Style');
 		parentElements.appendChild(label);
 		parentElements.appendChild(document.createElement('div'));
-		var introSelect = document.createElement('select');
 		var introLabel = document.createTextNode(' Intro : ');
 		parentElements.appendChild(introLabel);
 		
@@ -19,7 +22,6 @@ function Transition(parentElements,container){
 		}
 
 
-		var outroSelect = document.createElement('select');
 		var outroLabel = document.createTextNode(' Outro : ');
 		for(var i=0;i<outroTransition.length;i++){
 			var text = document.createTextNode(outroTransition[i]);
@@ -48,5 +50,11 @@ function Transition(parentElements,container){
 			container.dispatchEvent(transitionEvent);
 		};
 	}
+	
+	this.setTransition = function(transitionIn, transitionOut){
+		introSelect.value = transitionIn;
+		outroSelect.value = transitionOut;
+	}
+
 	this.init();
 }
