@@ -158,9 +158,7 @@ function EzeeUI(allSlide,parentArea){
 			pageNumber.setAttribute('class','page-number');
 
 			pageNumber.appendChild(document.createTextNode(slideCounter+1+"/"+allSlides.length));
-			console.log(pageNumber);
 			mainSlide.appendChild(pageNumber);
-			// mainSlide.appendChild(document.createTextNode(slideCounter+1+"/"+allSlides.length));
 			container.appendChild(mainSlide);
 			parentArea.appendChild(container);
 			slide = mainSlide;

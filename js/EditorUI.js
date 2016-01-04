@@ -114,7 +114,6 @@ function EditorUI()
 	
 	document.addEventListener('copy',function(e){
 		var slidesExport = JSON.parse(JSON.stringify(allSlides));
-		// slidesExport = document.extend( true, {}, allSlides );
 		for (var i=0;i<slidesExport.length;i++){
 			for(var j=0;j<slidesExport[i].elements.length;j++){
 				for(var k=0;k<slidesExport[i].elements[j].attributes.length;k++){
@@ -282,14 +281,18 @@ function EditorUI()
 		{
 			var newStyle = new Style(property, propertyValue);
 			allSlides[focusSlide].elements[focusElement].styles.push(newStyle);
-				centerArea.changeWorkspace(allSlides[focusSlide]);
-
+			centerArea.changeWorkspace(allSlides[focusSlide]);
 		}
 	}
 
 	function startSlide(){
-		centerArea.clearWorkspace();
-		var ezeeUI = new EzeeUI(allSlides, centerArea.getCenterArea());
+		if(allSlides.length == 0){
+			alert("No Slides Made.");
+		}
+		else{
+			centerArea.clearWorkspace();
+			var ezeeUI = new EzeeUI(allSlides, centerArea.getCenterArea());
+		}
 	}
 
 	function changedslideProperty (propertyValue,property){

@@ -12,7 +12,6 @@ function LeftBar(container,slides){
 	this.editSlide = document.createElement('div');
 	this.editSlide.appendChild(this.editText);
 
-
 	this.leftBar.setAttribute('class','left-bar');
 	this.slidesContainer.setAttribute('class','slides-container');
 	this.addSlide.setAttribute('class','add-slides');
@@ -24,6 +23,7 @@ function LeftBar(container,slides){
 
 	var self = this;
 	this.updateContainer = function(allSlides){
+		self.slides=allSlides;
 		self.slideCounter = allSlides.length;
 		while (self.slidesContainer.hasChildNodes()) {
 		    self.slidesContainer.removeChild(self.slidesContainer.lastChild);
@@ -64,13 +64,8 @@ function LeftBar(container,slides){
 		self.addSlide.appendChild(self.addText);
 
 		self.startSlide.addEventListener('click', function(){
-			if(slides.length!=0)
-			{
-				self.slideShow();
-			}
-			else{
-				alert('No slides made.');
-			}
+			var startSlide = new CustomEvent('startSlide',{});
+			container.dispatchEvent(startSlide);
 		});
 
 		self.editSlide.addEventListener('click', function(){
@@ -92,10 +87,6 @@ function LeftBar(container,slides){
 
 		container.appendChild(self.leftBar);
 
-	}
-	this.slideShow = function(){
-		var startSlide = new CustomEvent('startSlide',{});
-		container.dispatchEvent(startSlide);
 	}
 
 	this.getCounter = function(){
