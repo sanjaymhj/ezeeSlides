@@ -1,7 +1,7 @@
 function Tools(container){
 
 	var topTools = document.createElement('div');
-	topTools.setAttribute('class','slides-contianer');
+	topTools.setAttribute('class','slides-contianer clearfix');
 	
 	var slideTools = document.createElement('div');
 	slideTools.setAttribute('class', 'edit-tools');
@@ -16,8 +16,6 @@ function Tools(container){
 		div1.setAttribute('class','tool-seperator');
 		
 		slideTools.appendChild(div1);
-		slideTools.appendChild(document.createTextNode(' Background-Color : '));
-
 		var slideBackground = new SlideBackgroundColor(slideTools,container);
 		for(var i = 0;i<slide.styles.length;i++){
 			if(slide.styles[i].property == 'background-color'){

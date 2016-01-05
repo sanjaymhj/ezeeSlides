@@ -11,7 +11,11 @@ function ElementBackgroundColor(topTools,container){
 	backgroundColorInput.setAttribute('type','color');
 	clearBackgroundColor.appendChild(document.createTextNode('Clear'));
 	this.init = function(){
-		backgroundColor.appendChild(document.createTextNode('Background-Color : '));
+		var label = document.createTextNode('Background-Color : ');
+		var bold = document.createElement('b');
+		bold.appendChild(label);
+		backgroundColor.appendChild(bold);
+
 		backgroundColor.appendChild(document.createElement('div'));
 		backgroundColor.appendChild(backgroundColorInput);
 		backgroundColor.appendChild(clearBackgroundColor);

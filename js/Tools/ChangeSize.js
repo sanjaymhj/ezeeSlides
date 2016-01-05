@@ -7,9 +7,14 @@ function ChangeSize(parentElements,container){
 	this.init = function(){
 		
 		var label = document.createTextNode('Size : ');
-		parentElements.appendChild(label);
+		var bold = document.createElement('b');
+		bold.appendChild(label);
+		parentElements.appendChild(bold);
+		parentElements.appendChild(document.createElement('br'));
 		changeWidth.setAttribute('type','number');
 		changeWidth.setAttribute('class','tools change-position ');
+		parentElements.appendChild(document.createTextNode('--Width : '));
+
 		parentElement.appendChild(changeWidth);
 		changeWidth.onclick = function(){
 			var changewidth =new CustomEvent('changeWidth',{'detail':this.value});
@@ -17,6 +22,8 @@ function ChangeSize(parentElements,container){
 		};
 		changeHeight.setAttribute('type','number');
 		changeHeight.setAttribute('class','tools change-position ');
+		parentElements.appendChild(document.createTextNode('Height : '));
+
 		parentElement.appendChild(changeHeight);
 		parentElement.appendChild(document.createElement('div'));
 		changeHeight.onclick = function(){

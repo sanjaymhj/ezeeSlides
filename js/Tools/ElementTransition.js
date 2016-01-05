@@ -6,8 +6,11 @@ function ElementTransition(parentElements,container){
 
 	var parentElement = parentElements;
 	this.init = function(){
-		var label = document.createTextNode('Text Transition Style');
-		parentElements.appendChild(label);
+		var label = document.createTextNode('Text Animation : ');
+		var bold = document.createElement('b');
+		bold.appendChild(label);
+		parentElements.appendChild(bold);
+
 		parentElements.appendChild(document.createElement('div'));
 		var introLabel = document.createTextNode(' Intro : ');
 		parentElements.appendChild(introLabel);

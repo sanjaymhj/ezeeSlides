@@ -6,9 +6,14 @@ function ChangePosition(parentElements,container){
 
 	this.init = function(){
 		var label = document.createTextNode('Position : ');
-		parentElements.appendChild(label);
+		var bold = document.createElement('b');
+		bold.appendChild(label);
+		parentElements.appendChild(bold);
+
 		changePositionX.setAttribute('type','number');
 		changePositionX.setAttribute('class','tools change-position');
+		parentElements.appendChild(document.createElement('br'));
+		parentElements.appendChild(document.createTextNode('From Left : '));
 		parentElement.appendChild(changePositionX);
 		changePositionX.onclick = function(){
 			var changePosX = new CustomEvent('changePositionX',{'detail':this.value});
@@ -17,6 +22,8 @@ function ChangePosition(parentElements,container){
 
 		changePositionY.setAttribute('type','number');
 		changePositionY.setAttribute('class','tools change-position')
+		parentElements.appendChild(document.createTextNode('From Top : '));
+		
 		parentElement.appendChild(changePositionY);
 		parentElement.appendChild(document.createElement('div'));
 

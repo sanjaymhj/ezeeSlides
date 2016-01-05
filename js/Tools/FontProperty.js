@@ -4,8 +4,10 @@ function FontSize(parentElements,container){
 	var changeFont = document.createElement('input');
 
 	this.init = function(){
-		var label = document.createTextNode('Font-size : ');
-		parentElements.appendChild(label);
+		var label = document.createTextNode('Text-Size : ');
+		var bold = document.createElement('b');
+		bold.appendChild(label);
+		parentElements.appendChild(bold);
 		changeFont.setAttribute('type','number');
 		changeFont.setAttribute('class','tools fontsize');
 		parentElement.appendChild(changeFont);
@@ -28,9 +30,10 @@ function FontFamily(parentElements,container){
 	var changeFontFamily = document.createElement('select');
 
 	this.init = function(){
-		var label = document.createTextNode('Font Style : ');
-		parentElements.appendChild(label);
-		
+		var label = document.createTextNode('Font : ');
+		var bold = document.createElement('b');
+		bold.appendChild(label);
+		parentElements.appendChild(bold);
 		for(var i=0;i<fontFamily.length;i++){
 			var font = document.createTextNode(fontFamily[i]);
 			var opt = document.createElement('option');
@@ -170,8 +173,10 @@ function FontColor(parentElements,container){
 		fontColor.setAttribute('class','btn-sm');
 		fontColor.setAttribute('type','color');
 		fontColor.style['display']='inline-block';
-		parentElements.appendChild(document.createTextNode('Font-Color : '));
-
+		var label = document.createTextNode('Text Color : ');
+		var bold = document.createElement('b');
+		bold.appendChild(label);
+		parentElements.appendChild(bold);
 		parentElement.appendChild(fontColor);
 		parentElement.appendChild(document.createElement('div'));
 
